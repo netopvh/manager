@@ -1,0 +1,59 @@
+<template>
+    <div class="panel panel-default">
+        <div class="panel-heading">Clients</div>
+        <div class="panel-body">
+
+        </div>
+    </div>
+</template>
+
+<script>
+    export default {
+        data () {
+            return {
+
+            }
+        },
+        methods: {
+
+        }
+    }
+</script>
+
+<style>
+    .pagination {
+        margin: 0;
+        float: right;
+    }
+    .pagination a.page {
+        border: 1px solid lightgray;
+        border-radius: 3px;
+        padding: 5px 10px;
+        margin-right: 2px;
+    }
+    .pagination a.page.active {
+        color: white;
+        background-color: #337ab7;
+        border: 1px solid lightgray;
+        border-radius: 3px;
+        padding: 5px 10px;
+        margin-right: 2px;
+    }
+    .pagination a.btn-nav {
+        border: 1px solid lightgray;
+        border-radius: 3px;
+        padding: 5px 7px;
+        margin-right: 2px;
+    }
+    .pagination a.btn-nav.disabled {
+        color: lightgray;
+        border: 1px solid lightgray;
+        border-radius: 3px;
+        padding: 5px 7px;
+        margin-right: 2px;
+        cursor: not-allowed;
+    }
+    .pagination-info {
+        float: left;
+    }
+</style>
