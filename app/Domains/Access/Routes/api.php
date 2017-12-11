@@ -13,4 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 
-$this->resource('users','UserController');
+$this->resource('users','Api\UserApiController',['except' => [
+    'create'
+]]);

@@ -6,7 +6,6 @@
  */
 
 require('./bootstrap');
-require('vuetable-2');
 
 
 window.Vue = require('vue');
@@ -18,6 +17,7 @@ window.Vue = require('vue');
  */
 
 Vue.component('app-panel', require('./components/Panel.vue'));
+
 
 const app = new Vue({
     el: '#app'

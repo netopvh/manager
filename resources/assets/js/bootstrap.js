@@ -13,9 +13,12 @@ try {
     require('bootstrap-sass');
 } catch (e) {}
 
-window.ripple = require('ripple-js');
+require('ripple-js');
+require('jquery.nicescroll');
+require('datatables.net');
+require('datatables.net-responsive-dt/css/responsive.dataTables.min.css');
 
-window.nicescroll = require('jquery.nicescroll');
+require('./actions/users');
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

@@ -25,18 +25,18 @@
                                 <a href="#">3 columns</a>
                                 <ul>
                                     <li>
-                                        <a href="3_col_double.html">Double sidebars</a>
+                                        <a href="#">Double sidebars</a>
                                     </li>
                                 </ul>
                             </li>
                             <li class="navigation-divider"></li>
                             <li>
-                                <a href="layout_navbar_fixed_main.html">Fixed top navbar</a>
+                                <a href="#">Fixed top navbar</a>
                             </li>
                         </ul>
                     </li>
                     <li>
-                        <a href="../changelog.html">
+                        <a href="#">
                             <i class="icon-list-unordered"></i>
                             <span class="text-bold">Changelog</span>
                         </a>
@@ -51,7 +51,7 @@
                             <span class="text-bold">Gerenciamento de Acesso</span>
                         </a>
                         <ul>
-                            <li>
+                            <li class="{{ active(['users.*']) }}">
                                 <a href="{{ route('users.home') }}">
                                     <i class="icon-user"></i>
                                     <span class="text-bold">Usuários</span>
