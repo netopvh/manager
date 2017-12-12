@@ -7,19 +7,7 @@
                 <div class="panel-heading">
                     <span class="text-bold">Usuários</span>
                 </div>
-                <div class="panel-body">
-
-                </div>
-                <table class="table table-bordered table-condensed table-striped" id="users">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>Email</th>
-                        <th>Ações</th>
-                    </tr>
-                    </thead>
-                </table>
+                <user-table></user-table>
             </div>
         </div>
     </div>

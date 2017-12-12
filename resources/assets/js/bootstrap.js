@@ -15,10 +15,16 @@ try {
 
 require('ripple-js');
 require('jquery.nicescroll');
-require('datatables.net');
-require('datatables.net-responsive-dt/css/responsive.dataTables.min.css');
+require('vuetable-2');
 
-require('./actions/users');
+//require('./actions/users');
+
+/**
+ *
+ * Other lib imports
+ *
+ */
+
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
