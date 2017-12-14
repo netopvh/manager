@@ -11,6 +11,7 @@
     },
     "devDependencies": {
         "axios": "^0.17",
+        "babel-plugin-syntax-object-rest-spread": "^6.13.0",
         "babel-plugin-transform-runtime": "^6.23.0",
         "babel-preset-stage-2": "^6.24.1",
         "bootstrap-sass": "^3.3.7",
@@ -25,8 +26,11 @@
         "vuetable-2": "^1.7.1"
     },
     "dependencies": {
+        "babel-plugin-syntax-jsx": "^6.18.0",
+        "babel-plugin-transform-vue-jsx": "^3.5.0",
         "jquery.nicescroll": "^3.7.6",
         "ripple-js": "^1.4.4",
+        "vue-datasource": "^2.0.6",
         "vue-events": "^3.1.0"
     }
 }

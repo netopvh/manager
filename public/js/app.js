@@ -1631,1102 +1631,576 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./node_modules/vuetable-2/src/components/Vuetable.vue":
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./node_modules/vue-datasource/src/components/Pagination.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_DatasourceUtils__ = __webpack_require__("./node_modules/vue-datasource/src/utils/DatasourceUtils.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_EventBus__ = __webpack_require__("./node_modules/vue-datasource/src/utils/EventBus.js");
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'Datasource-Pagination',
+  render: function render(h) {
+    var _this = this;
+
+    return h(
+      'div',
+      { 'class': 'vue-pagination' },
+      [h(
+        'nav',
+        null,
+        [h(
+          'ul',
+          { 'class': 'pagination' },
+          [h(
+            'li',
+            { 'class': { disabled: this.currentPage === 1 } },
+            [h(
+              'a',
+              {
+                attrs: { href: '#' },
+                on: {
+                  'click': function click(e) {
+                    return _this.firstPage(e);
+                  }
+                }
+              },
+              [h(
+                'span',
+                {
+                  attrs: { 'aria-hidden': 'true' }
+                },
+                ['\xAB\xAB']
+              )]
+            )]
+          ), h(
+            'li',
+            { 'class': { disabled: this.currentPage === 1 } },
+            [h(
+              'a',
+              {
+                attrs: { href: '#' },
+                on: {
+                  'click': function click(e) {
+                    return _this.previous(e);
+                  }
+                }
+              },
+              [h(
+                'span',
+                {
+                  attrs: { 'aria-hidden': 'true' }
+                },
+                ['\xAB']
+              )]
+            )]
+          ), this.paginationItems, h(
+            'li',
+            { 'class': { disabled: this.currentPage === this.lastPage } },
+            [h(
+              'a',
+              {
+                attrs: { href: '#' },
+                on: {
+                  'click': function click(e) {
+                    return _this.next(e);
+                  }
+                }
+              },
+              [h(
+                'span',
+                {
+                  attrs: { 'aria-hidden': 'true' }
+                },
+                ['\xBB']
+              )]
+            )]
+          ), h(
+            'li',
+            { 'class': { disabled: this.currentPage === this.lastPage } },
+            [h(
+              'a',
+              {
+                attrs: { href: '#' },
+                on: {
+                  'click': function click(e) {
+                    return _this.goTolastPage(e, _this.lastPage);
+                  }
+                }
+              },
+              [h(
+                'span',
+                {
+                  attrs: { 'aria-hidden': 'true' }
+                },
+                ['\xBB\xBB']
+              )]
+            )]
+          )]
+        )]
+      )]
+    );
+  },
+
+  props: {
+    total: {
+      type: Number,
+      default: 0
+    },
+    perPage: {
+      type: Number,
+      default: 0
+    }
+  },
+  created: function created() {
+    var _this2 = this;
+
+    window.addEventListener('keyup', function (_ref) {
+      var key = _ref.key;
+      return _this2.changePageWithKeyBoard(key);
+    });
+  },
+  data: function data() {
+    return {
+      currentPage: 1
+    };
+  },
+
+  computed: {
+    items: __WEBPACK_IMPORTED_MODULE_0__utils_DatasourceUtils__["a" /* default */].gettingItems,
+    paginationItems: function paginationItems() {
+      var _this3 = this;
+
+      var h = this.$createElement;
+
+      return this.items.map(function (item, index) {
+        return h(
+          'li',
+          { 'class': { active: _this3.currentPage === item } },
+          [h(
+            'a',
+            {
+              attrs: { href: '#' },
+              on: {
+                'click': function click(e) {
+                  return _this3.change(e, item);
+                }
+              }
+            },
+            [item]
+          )]
+        );
+      });
+    },
+    lastPage: function lastPage() {
+      if (this.total === 0) return 1;
+      return parseInt((this.total - 1) / this.perPage + 1);
+    }
+  },
+  methods: {
+    firstPage: function firstPage(e) {
+      e.preventDefault();
+      if (this.currentPage !== 1) {
+        this.change(e, 1);
+      }
+    },
+    previous: function previous(e) {
+      e.preventDefault();
+      if (this.currentPage !== 1) {
+        this.change(e, --this.currentPage);
+      }
+    },
+    change: function change(e, page) {
+      e.preventDefault();
+      this.currentPage = page;
+      __WEBPACK_IMPORTED_MODULE_1__utils_EventBus__["a" /* EventBus */].$emit('pagination-change', page);
+    },
+    next: function next(e) {
+      e.preventDefault();
+      if (this.currentPage !== this.lastPage) {
+        this.change(e, ++this.currentPage);
+      }
+    },
+    goTolastPage: function goTolastPage(e, page) {
+      e.preventDefault();
+      if (this.currentPage !== this.lastPage) {
+        this.change(e, page);
+      }
+    },
+    changePageWithKeyBoard: function changePageWithKeyBoard(key) {
+      if (key === 'ArrowLeft') {
+        this.previous();
+      } else if (key === 'ArrowRight') {
+        this.next();
+      }
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./node_modules/vue-datasource/src/components/ServerDatasource.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+throw new Error("Cannot find module \"@/utils/DatasourceUtils\"");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Pagination__ = __webpack_require__("./node_modules/vue-datasource/src/components/Pagination.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Pagination___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__Pagination__);
+throw new Error("Cannot find module \"@/utils/EventBus\"");
+throw new Error("Cannot find module \"@/assets/icon-sort-asc.svg\"");
+throw new Error("Cannot find module \"@/assets/icon-sort-desc.svg\"");
+
+
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'ServerDatasource',
+  components: { Pagination: __WEBPACK_IMPORTED_MODULE_1__Pagination___default.a },
+  render: function render(h) {
+    var _this = this;
+
+    return h(
+      'div',
+      { 'class': 'vue-server-datasource' },
+      [h(
+        'div',
+        { 'class': 'panel panel-default' },
+        [h(
+          'div',
+          { 'class': 'panel-heading' },
+          [h(
+            'div',
+            { 'class': 'form-inline' },
+            [h(
+              'div',
+              { 'class': 'form-group pull-left' },
+              [h(
+                'label',
+                { 'class': 'control-label pr2' },
+                [this.translation.limit]
+              ), h(
+                'select',
+                {
+                  on: {
+                    'change': function change(e) {
+                      return _this.sync('perpage', parseInt(e.target.value));
+                    }
+                  },
+                  'class': 'form-control', attrs: { number: true }
+                },
+                [this.limitOptions]
+              )]
+            ), h(
+              'div',
+              { 'class': 'form-group pull-right' },
+              [h(
+                'input',
+                { 'class': 'form-control mr1', attrs: { type: 'text', placeholder: this.translation.placeholder_search },
+                  on: {
+                    'input': function input(e) {
+                      return _this.searching(e);
+                    }
+                  }
+                },
+                []
+              )]
+            ), h(
+              'div',
+              { 'class': 'clearfix' },
+              []
+            )]
+          )]
+        ), h(
+          'div',
+          { 'class': 'panel-body' },
+          [h(
+            'table',
+            { 'class': 'table table-striped' },
+            [h(
+              'thead',
+              null,
+              [h(
+                'tr',
+                null,
+                [this.columnItems]
+              )]
+            ), h(
+              'tbody',
+              null,
+              [this.columnObjects]
+            )]
+          )]
+        ), h(
+          'div',
+          { 'class': 'panel-footer' },
+          [h(
+            'div',
+            { 'class': 'pull-left btn-group btn-group-actions' },
+            [this.actionsObject]
+          ), h(
+            'div',
+            { 'class': 'pull-right' },
+            [h(
+              'pagination',
+              {
+                attrs: { total: this.total, 'per-page': this.perpage }
+              },
+              []
+            )]
+          ), h(
+            'div',
+            { 'class': 'clearfix' },
+            []
+          )]
+        )]
+      )]
+    );
+  },
+
   props: {
-    fields: {
+    source: {
       type: Array,
       required: true
     },
-    loadOnStart: {
-      type: Boolean,
-      default: true
-    },
-    apiUrl: {
-      type: String,
-      default: ''
-    },
-    httpMethod: {
-      type: String,
-      default: 'get',
-      validator: function validator(value) {
-        return ['get', 'post'].indexOf(value) > -1;
-      }
-    },
-    reactiveApiUrl: {
-      type: Boolean,
-      default: true
-    },
-    apiMode: {
-      type: Boolean,
-      default: true
-    },
-    data: {
-      type: [Array, Object],
-      default: function _default() {
-        return null;
-      }
-    },
-    dataTotal: {
+
+    total: {
       type: Number,
-      default: 0
+      required: true
     },
-    dataManager: {
-      type: Function,
+
+    limits: {
+      type: Array,
       default: function _default() {
-        return null;
+        return [1, 5, 10, 15, 20];
       }
     },
-    dataPath: {
-      type: String,
-      default: 'data'
-    },
-    paginationPath: {
-      type: [String],
-      default: 'links.pagination'
-    },
-    queryParams: {
+
+    translation: {
       type: Object,
       default: function _default() {
         return {
-          sort: 'sort',
-          page: 'page',
-          perPage: 'per_page'
+          limit: 'Limit',
+          search: 'Search',
+          placeholder_search: 'Type to search..',
+          records_not_found: 'No records found',
+          pagination: {
+            show: 'Showing',
+            to: 'to',
+            of: 'of',
+            entries: 'entries'
+          }
         };
       }
     },
-    appendParams: {
-      type: Object,
-      default: function _default() {
-        return {};
-      }
+
+    columns: {
+      type: Array,
+      required: true
     },
-    httpOptions: {
-      type: Object,
-      default: function _default() {
-        return {};
-      }
-    },
-    httpFetch: {
-      type: Function,
-      default: null
-    },
-    perPage: {
-      type: Number,
-      default: function _default() {
-        return 10;
-      }
-    },
-    initialPage: {
-      type: Number,
-      default: function _default() {
-        return 1;
-      }
-    },
-    sortOrder: {
+
+    actions: {
       type: Array,
       default: function _default() {
         return [];
       }
-    },
-    multiSort: {
-      type: Boolean,
-      default: function _default() {
-        return false;
-      }
-    },
-    tableHeight: {
-      type: String,
-      default: null
-    },
-
-    multiSortKey: {
-      type: String,
-      default: 'alt'
-    },
-
-    rowClassCallback: {
-      type: [String, Function],
-      default: ''
-    },
-    rowClass: {
-      type: [String, Function],
-      default: ''
-    },
-    detailRowComponent: {
-      type: String,
-      default: ''
-    },
-    detailRowTransition: {
-      type: String,
-      default: ''
-    },
-    trackBy: {
-      type: String,
-      default: 'id'
-    },
-    css: {
-      type: Object,
-      default: function _default() {
-        return {
-          tableClass: 'ui blue selectable celled stackable attached table',
-          loadingClass: 'loading',
-          ascendingIcon: 'blue chevron up icon',
-          descendingIcon: 'blue chevron down icon',
-          ascendingClass: 'sorted-asc',
-          descendingClass: 'sorted-desc',
-          sortableIcon: '',
-          detailRowClass: 'vuetable-detail-row',
-          handleIcon: 'grey sidebar icon',
-          tableBodyClass: 'vuetable-semantic-no-top vuetable-fixed-layout',
-          tableHeaderClass: 'vuetable-fixed-layout'
-        };
-      }
-    },
-    minRows: {
-      type: Number,
-      default: 0
-    },
-    silent: {
-      type: Boolean,
-      default: false
-    },
-    noDataTemplate: {
-      type: String,
-      default: function _default() {
-        return 'No Data Available';
-      }
-    },
-    showSortIcons: {
-      type: Boolean,
-      default: true
     }
+  },
+  created: function created() {
+    __WEBPACK_IMPORTED_MODULE_2__utils_EventBus__["EventBus"].$on('pagination-change', this.changePage);
   },
   data: function data() {
     return {
-      eventPrefix: 'vuetable:',
-      tableFields: [],
-      tableData: null,
-      tablePagination: null,
-      currentPage: this.initialPage,
-      selectedTo: [],
-      visibleDetailRows: [],
-      lastScrollPosition: 0,
-      scrollBarWidth: '17px',
-      scrollVisible: false
-    };
-  },
-  mounted: function mounted() {
-    this.normalizeFields();
-    this.normalizeSortOrder();
-    if (this.isFixedHeader) {
-      this.scrollBarWidth = this.getScrollBarWidth() + 'px';
-    }
-    this.$nextTick(function () {
-      this.fireEvent('initialized', this.tableFields);
-    });
-
-    if (this.loadOnStart) {
-      this.loadData();
-    }
-    if (this.isFixedHeader) {
-      var elem = this.$el.getElementsByClassName('vuetable-body-wrapper')[0];
-      if (elem != null) {
-        elem.addEventListener('scroll', this.handleScroll);
+      perpage: 10,
+      current_page: 1,
+      selected: null,
+      indexSelected: -1,
+      search: '',
+      columnSortSelected: {
+        key: null,
+        order: true
       }
-    }
-  },
-  destroyed: function destroyed() {
-    var elem = this.$el.getElementsByClassName('vuetable-body-wrapper')[0];
-    if (elem != null) {
-      elem.removeEventListener('scroll', this.handleScroll);
-    }
+    };
   },
 
   computed: {
-    useDetailRow: function useDetailRow() {
-      if (this.tableData && this.tableData[0] && this.detailRowComponent !== '' && typeof this.tableData[0][this.trackBy] === 'undefined') {
-        this.warn('You need to define unique row identifier in order for detail-row feature to work. Use `track-by` prop to define one!');
-        return false;
-      }
+    limitOptions: function limitOptions() {
+      var _this2 = this;
 
-      return this.detailRowComponent !== '';
-    },
-    countVisibleFields: function countVisibleFields() {
-      return this.tableFields.filter(function (field) {
-        return field.visible;
-      }).length;
-    },
-    countTableData: function countTableData() {
-      if (this.tableData === null) {
-        return 0;
-      }
-      return this.tableData.length;
-    },
-    displayEmptyDataRow: function displayEmptyDataRow() {
-      return this.countTableData === 0 && this.noDataTemplate.length > 0;
-    },
-    lessThanMinRows: function lessThanMinRows() {
-      if (this.tableData === null || this.tableData.length === 0) {
-        return true;
-      }
-      return this.tableData.length < this.minRows;
-    },
-    blankRows: function blankRows() {
-      if (this.tableData === null || this.tableData.length === 0) {
-        return this.minRows;
-      }
-      if (this.tableData.length >= this.minRows) {
-        return 0;
-      }
+      var h = this.$createElement;
 
-      return this.minRows - this.tableData.length;
+      return this.limits.map(function (limit, index) {
+        return h(
+          'option',
+          {
+            domProps: {
+              'value': limit,
+              'selected': parseInt(_this2.perpage) === parseInt(limit)
+            }
+          },
+          [limit]
+        );
+      });
     },
-    isApiMode: function isApiMode() {
-      return this.apiMode;
+    columnItems: function columnItems() {
+      var _this3 = this;
+
+      var h = this.$createElement;
+
+      var showArrows = function showArrows(key) {
+        if (_this3.columnSortSelected.key) {
+          return _this3.shouldShowUpArrow(key) ? h(
+            'img',
+            { 'class': 'arrow-active', attrs: { src: __WEBPACK_IMPORTED_MODULE_3__assets_icon_sort_asc_svg___default.a, width: '15' }
+            },
+            []
+          ) : h(
+            'img',
+            { 'class': 'arrow-active', attrs: { src: __WEBPACK_IMPORTED_MODULE_4__assets_icon_sort_desc_svg___default.a, width: '15' }
+            },
+            []
+          );
+        } else {
+          return h(
+            'img',
+            {
+              attrs: { src: __WEBPACK_IMPORTED_MODULE_4__assets_icon_sort_desc_svg___default.a, width: '15' }
+            },
+            []
+          );
+        }
+      };
+
+      return this.columns.map(function (column, index) {
+        if (column.order) {
+          return h(
+            'th',
+            { 'class': 'vue-server-ordering', on: {
+                'click': function click(e) {
+                  return _this3.sortColumn(e, column.key);
+                }
+              }
+            },
+            [column.name, h(
+              'span',
+              { 'class': 'vue-server-arrows' },
+              [showArrows(column.key)]
+            )]
+          );
+        } else {
+          return h(
+            'th',
+            null,
+            [column.name]
+          );
+        }
+      });
     },
-    isDataMode: function isDataMode() {
-      return !this.apiMode;
+    columnObjects: function columnObjects() {
+      var _this4 = this;
+
+      var h = this.$createElement;
+
+      if (this.source.length === 0) {
+        return h(
+          'tr',
+          { 'class': 'text-center' },
+          [h(
+            'td',
+            {
+              attrs: { colspan: this.columns.length }
+            },
+            [this.translation.records_not_found]
+          )]
+        );
+      } else {
+        return this.source.map(function (row, index) {
+          var columns = _this4.columns.map(function (column, index) {
+            return h(
+              'td',
+              null,
+              [_this4.fetchFromObject(row, column.key, column.render)]
+            );
+          });
+          return h(
+            'tr',
+            { 'class': { success: index === _this4.indexSelected }, on: {
+                'click': function click(e) {
+                  return _this4.selectRow(e, row, index);
+                }
+              }
+            },
+            [columns]
+          );
+        });
+      }
     },
-    isFixedHeader: function isFixedHeader() {
-      return this.tableHeight != null;
+    actionsObject: function actionsObject() {
+      var _this5 = this;
+
+      var h = this.$createElement;
+
+      return this.actions.map(function (action, index) {
+        try {
+          if (action.show(_this5.selected)) {
+            return h(
+              'button',
+              { 'class': _this5.dynamicClass('btn', action.class), attrs: { type: 'button' },
+                on: {
+                  'click': function click(e) {
+                    return action.event(e, _this5.selected);
+                  }
+                }
+              },
+              [h(
+                'i',
+                { 'class': _this5.dynamicClass('pr1', action.icon) },
+                []
+              ), action.text]
+            );
+          }
+        } catch (ex) {
+          console.warn('[VueDatasource] The callback show is not defined in action ' + action.text + '.');
+        }
+      });
     }
   },
   methods: {
-    getScrollBarWidth: function getScrollBarWidth() {
-      var outer = document.createElement('div');
-      var inner = document.createElement('div');
-
-      outer.style.visibility = 'hidden';
-      outer.style.width = '100px';
-
-      inner.style.width = '100%';
-
-      outer.appendChild(inner);
-      document.body.appendChild(outer);
-
-      var widthWithoutScrollbar = outer.offsetWidth;
-
-      outer.style.overflow = 'scroll';
-
-      var widthWithScrollbar = inner.offsetWidth;
-
-      document.body.removeChild(outer);
-
-      return widthWithoutScrollbar - widthWithScrollbar;
-    },
-    handleScroll: function handleScroll(e) {
-      var horizontal = e.currentTarget.scrollLeft;
-      if (horizontal != this.lastScrollPosition) {
-        var header = this.$el.getElementsByClassName('vuetable-head-wrapper')[0];
-        if (header != null) {
-          header.scrollLeft = horizontal;
-        }
-        this.lastScrollPosition = horizontal;
-      }
-    },
-    normalizeFields: function normalizeFields() {
-      if (typeof this.fields === 'undefined') {
-        this.warn('You need to provide "fields" prop.');
-        return;
-      }
-
-      this.tableFields = [];
-      var self = this;
-      var obj = void 0;
-      this.fields.forEach(function (field, i) {
-        if (typeof field === 'string') {
-          obj = {
-            name: field,
-            title: self.setTitle(field),
-            titleClass: '',
-            dataClass: '',
-            callback: null,
-            visible: true
-          };
-        } else {
-          obj = {
-            name: field.name,
-            width: field.width,
-            title: field.title === undefined ? self.setTitle(field.name) : field.title,
-            sortField: field.sortField,
-            titleClass: field.titleClass === undefined ? '' : field.titleClass,
-            dataClass: field.dataClass === undefined ? '' : field.dataClass,
-            callback: field.callback === undefined ? '' : field.callback,
-            visible: field.visible === undefined ? true : field.visible
-          };
-        }
-        self.tableFields.push(obj);
-      });
-    },
-    setData: function setData(data) {
-      this.apiMode = false;
-      if (Array.isArray(data)) {
-        this.tableData = data;
-        return;
-      }
-
-      this.fireEvent('loading');
-
-      this.tableData = this.getObjectValue(data, this.dataPath, null);
-      this.tablePagination = this.getObjectValue(data, this.paginationPath, null);
-
-      this.$nextTick(function () {
-        this.fireEvent('pagination-data', this.tablePagination);
-        this.fireEvent('loaded');
-      });
-    },
-    setTitle: function setTitle(str) {
-      if (this.isSpecialField(str)) {
-        return '';
-      }
-
-      return this.titleCase(str);
-    },
-    getTitle: function getTitle(field) {
-      if (typeof field.title === 'function') return field.title();
-
-      return typeof field.title === 'undefined' ? field.name.replace('.', ' ') : field.title;
-    },
-    renderTitle: function renderTitle(field) {
-      var title = this.getTitle(field);
-
-      if (title.length > 0 && this.isInCurrentSortGroup(field) || this.hasSortableIcon(field)) {
-        var style = 'opacity:' + this.sortIconOpacity(field) + ';position:relative;float:right';
-        return title + ' ' + this.renderIconTag(['sort-icon', this.sortIcon(field)], 'style="' + style + '"');
-      }
-
-      return title;
-    },
-    renderSequence: function renderSequence(index) {
-      return this.tablePagination ? this.tablePagination.from + index : index;
-    },
-    renderNormalField: function renderNormalField(field, item) {
-      return this.hasCallback(field) ? this.callCallback(field, item) : this.getObjectValue(item, field.name, '');
-    },
-    isSpecialField: function isSpecialField(fieldName) {
-      return fieldName.slice(0, 2) === '__';
-    },
-    titleCase: function titleCase(str) {
-      return str.replace(/\w+/g, function (txt) {
-        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-      });
-    },
-    camelCase: function camelCase(str) {
-      var delimiter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '_';
-
-      var self = this;
-      return str.split(delimiter).map(function (item) {
-        return self.titleCase(item);
-      }).join('');
-    },
-    notIn: function notIn(str, arr) {
-      return arr.indexOf(str) === -1;
-    },
-    loadData: function loadData() {
-      var success = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.loadSuccess;
-      var failed = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.loadFailed;
-
-      if (this.isDataMode) {
-        this.callDataManager();
-        return;
-      }
-
-      this.fireEvent('loading');
-
-      this.httpOptions['params'] = this.getAllQueryParams();
-
-      return this.fetch(this.apiUrl, this.httpOptions).then(success, failed).catch(function () {
-        return failed();
-      });
-    },
-    fetch: function fetch(apiUrl, httpOptions) {
-      return this.httpFetch ? this.httpFetch(apiUrl, httpOptions) : __WEBPACK_IMPORTED_MODULE_0_axios___default.a[this.httpMethod](apiUrl, httpOptions);
-    },
-    loadSuccess: function loadSuccess(response) {
-      this.fireEvent('load-success', response);
-
-      var body = this.transform(response.data);
-
-      this.tableData = this.getObjectValue(body, this.dataPath, null);
-      this.tablePagination = this.getObjectValue(body, this.paginationPath, null);
-
-      if (this.tablePagination === null) {
-        this.warn('vuetable: pagination-path "' + this.paginationPath + '" not found. ' + 'It looks like the data returned from the sever does not have pagination information ' + "or you may have set it incorrectly.\n" + 'You can explicitly suppress this warning by setting pagination-path="".');
-      }
-
-      this.$nextTick(function () {
-        this.fixHeader();
-        this.fireEvent('pagination-data', this.tablePagination);
-        this.fireEvent('loaded');
-      });
-    },
-    fixHeader: function fixHeader() {
-      if (!this.isFixedHeader) {
-        return;
-      }
-
-      var elem = this.$el.getElementsByClassName('vuetable-body-wrapper')[0];
-      if (elem != null) {
-        if (elem.scrollHeight > elem.clientHeight) {
-          this.scrollVisible = true;
-        } else {
-          this.scrollVisible = false;
-        }
-      }
-    },
-    loadFailed: function loadFailed(response) {
-      console.error('load-error', response);
-      this.fireEvent('load-error', response);
-      this.fireEvent('loaded');
-    },
-    transform: function transform(data) {
-      var func = 'transform';
-
-      if (this.parentFunctionExists(func)) {
-        return this.$parent[func].call(this.$parent, data);
-      }
-
-      return data;
-    },
-    parentFunctionExists: function parentFunctionExists(func) {
-      return func !== '' && typeof this.$parent[func] === 'function';
-    },
-    callParentFunction: function callParentFunction(func, args) {
-      var defaultValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-
-      if (this.parentFunctionExists(func)) {
-        return this.$parent[func].call(this.$parent, args);
-      }
-
-      return defaultValue;
-    },
-    fireEvent: function fireEvent(eventName, args) {
-      this.$emit(this.eventPrefix + eventName, args);
-    },
-    warn: function warn(msg) {
-      if (!this.silent) {
-        console.warn(msg);
-      }
-    },
-    getAllQueryParams: function getAllQueryParams() {
-      var params = {};
-      params[this.queryParams.sort] = this.getSortParam();
-      params[this.queryParams.page] = this.currentPage;
-      params[this.queryParams.perPage] = this.perPage;
-
-      for (var x in this.appendParams) {
-        params[x] = this.appendParams[x];
-      }
-
-      return params;
-    },
-    getSortParam: function getSortParam() {
-      if (!this.sortOrder || this.sortOrder.field == '') {
-        return '';
-      }
-
-      if (typeof this.$parent['getSortParam'] == 'function') {
-        return this.$parent['getSortParam'].call(this.$parent, this.sortOrder);
-      }
-
-      return this.getDefaultSortParam();
-    },
-    getDefaultSortParam: function getDefaultSortParam() {
-      var result = '';
-
-      for (var i = 0; i < this.sortOrder.length; i++) {
-        var fieldName = typeof this.sortOrder[i].sortField === 'undefined' ? this.sortOrder[i].field : this.sortOrder[i].sortField;
-
-        result += fieldName + '|' + this.sortOrder[i].direction + (i + 1 < this.sortOrder.length ? ',' : '');
-      }
-
-      return result;
-    },
-    extractName: function extractName(string) {
-      return string.split(':')[0].trim();
-    },
-    extractArgs: function extractArgs(string) {
-      return string.split(':')[1];
-    },
-    isSortable: function isSortable(field) {
-      return !(typeof field.sortField === 'undefined');
-    },
-    isInCurrentSortGroup: function isInCurrentSortGroup(field) {
-      return this.currentSortOrderPosition(field) !== false;
-    },
-    hasSortableIcon: function hasSortableIcon(field) {
-      return this.isSortable(field) && this.css.sortableIcon != '';
-    },
-    currentSortOrderPosition: function currentSortOrderPosition(field) {
-      if (!this.isSortable(field)) {
-        return false;
-      }
-
-      for (var i = 0; i < this.sortOrder.length; i++) {
-        if (this.fieldIsInSortOrderPosition(field, i)) {
-          return i;
-        }
-      }
-
-      return false;
-    },
-    fieldIsInSortOrderPosition: function fieldIsInSortOrderPosition(field, i) {
-      return this.sortOrder[i].field === field.name && this.sortOrder[i].sortField === field.sortField;
-    },
-    orderBy: function orderBy(field, event) {
-      if (!this.isSortable(field)) return;
-
-      var key = this.multiSortKey.toLowerCase() + 'Key';
-
-      if (this.multiSort && event[key]) {
-        this.multiColumnSort(field);
-      } else {
-        this.singleColumnSort(field);
-      }
-
-      this.currentPage = 1;
-      if (this.apiMode) {
-        this.loadData();
-      }
-    },
-    multiColumnSort: function multiColumnSort(field) {
-      var i = this.currentSortOrderPosition(field);
-
-      if (i === false) {
-        this.sortOrder.push({
-          field: field.name,
-          sortField: field.sortField,
-          direction: 'asc'
-        });
-      } else {
-        if (this.sortOrder[i].direction === 'asc') {
-          this.sortOrder[i].direction = 'desc';
-        } else {
-          this.sortOrder.splice(i, 1);
-        }
-      }
-    },
-    singleColumnSort: function singleColumnSort(field) {
-      if (this.sortOrder.length === 0) {
-        this.clearSortOrder();
-      }
-
-      this.sortOrder.splice(1);
-
-      if (this.fieldIsInSortOrderPosition(field, 0)) {
-        this.sortOrder[0].direction = this.sortOrder[0].direction === 'asc' ? 'desc' : 'asc';
-      } else {
-        this.sortOrder[0].direction = 'asc';
-      }
-      this.sortOrder[0].field = field.name;
-      this.sortOrder[0].sortField = field.sortField;
-    },
-    clearSortOrder: function clearSortOrder() {
-      this.sortOrder.push({
-        field: '',
-        sortField: '',
-        direction: 'asc'
-      });
-    },
-    sortIcon: function sortIcon(field) {
-      var cls = this.css.sortableIcon;
-      var i = this.currentSortOrderPosition(field);
-
-      if (i !== false) {
-        cls = this.sortOrder[i].direction == 'asc' ? this.css.ascendingIcon : this.css.descendingIcon;
-      }
-
-      return cls;
-    },
-    sortIconOpacity: function sortIconOpacity(field) {
-      var max = 1.0,
-          min = 0.3,
-          step = 0.3;
-
-      var count = this.sortOrder.length;
-      var current = this.currentSortOrderPosition(field);
-
-      if (max - count * step < min) {
-        step = (max - min) / (count - 1);
-      }
-
-      var opacity = max - current * step;
-
-      return opacity;
-    },
-    hasCallback: function hasCallback(item) {
-      return item.callback ? true : false;
-    },
-    callCallback: function callCallback(field, item) {
-      if (!this.hasCallback(field)) return;
-
-      if (typeof field.callback == 'function') {
-        return field.callback(this.getObjectValue(item, field.name));
-      }
-
-      var args = field.callback.split('|');
-      var func = args.shift();
-
-      if (typeof this.$parent[func] === 'function') {
-        var value = this.getObjectValue(item, field.name);
-
-        return args.length > 0 ? this.$parent[func].apply(this.$parent, [value].concat(args)) : this.$parent[func].call(this.$parent, value);
-      }
-
-      return null;
-    },
-    getObjectValue: function getObjectValue(object, path, defaultValue) {
-      defaultValue = typeof defaultValue === 'undefined' ? null : defaultValue;
-
-      var obj = object;
-      if (path.trim() != '') {
-        var keys = path.split('.');
-        keys.forEach(function (key) {
-          if (obj !== null && typeof obj[key] !== 'undefined' && obj[key] !== null) {
-            obj = obj[key];
-          } else {
-            obj = defaultValue;
-            return;
-          }
-        });
-      }
-      return obj;
-    },
-    toggleCheckbox: function toggleCheckbox(dataItem, fieldName, event) {
-      var isChecked = event.target.checked;
-      var idColumn = this.trackBy;
-
-      if (dataItem[idColumn] === undefined) {
-        this.warn('__checkbox field: The "' + this.trackBy + '" field does not exist! Make sure the field you specify in "track-by" prop does exist.');
-        return;
-      }
-
-      var key = dataItem[idColumn];
-      if (isChecked) {
-        this.selectId(key);
-      } else {
-        this.unselectId(key);
-      }
-      this.$emit('vuetable:checkbox-toggled', isChecked, dataItem);
-    },
-    selectId: function selectId(key) {
-      if (!this.isSelectedRow(key)) {
-        this.selectedTo.push(key);
-      }
-    },
-    unselectId: function unselectId(key) {
-      this.selectedTo = this.selectedTo.filter(function (item) {
-        return item !== key;
-      });
-    },
-    isSelectedRow: function isSelectedRow(key) {
-      return this.selectedTo.indexOf(key) >= 0;
-    },
-    rowSelected: function rowSelected(dataItem, fieldName) {
-      var idColumn = this.trackBy;
-      var key = dataItem[idColumn];
-
-      return this.isSelectedRow(key);
-    },
-    checkCheckboxesState: function checkCheckboxesState(fieldName) {
-      if (!this.tableData) return;
-
-      var self = this;
-      var idColumn = this.trackBy;
-      var selector = 'th.vuetable-th-checkbox-' + idColumn + ' input[type=checkbox]';
-      var els = document.querySelectorAll(selector);
-
-      if (els.forEach === undefined) els.forEach = function (cb) {
-        [].forEach.call(els, cb);
-      };
-
-      var selected = this.tableData.filter(function (item) {
-        return self.selectedTo.indexOf(item[idColumn]) >= 0;
-      });
-
-      if (selected.length <= 0) {
-        els.forEach(function (el) {
-          el.indeterminate = false;
-        });
-        return false;
-      } else if (selected.length < this.perPage) {
-          els.forEach(function (el) {
-            el.indeterminate = true;
-          });
-          return true;
-        } else {
-            els.forEach(function (el) {
-              el.indeterminate = false;
-            });
-            return true;
-          }
-    },
-    toggleAllCheckboxes: function toggleAllCheckboxes(fieldName, event) {
-      var self = this;
-      var isChecked = event.target.checked;
-      var idColumn = this.trackBy;
-
-      if (isChecked) {
-        this.tableData.forEach(function (dataItem) {
-          self.selectId(dataItem[idColumn]);
-        });
-      } else {
-        this.tableData.forEach(function (dataItem) {
-          self.unselectId(dataItem[idColumn]);
-        });
-      }
-      this.$emit('vuetable:checkbox-toggled-all', isChecked);
-    },
-    gotoPreviousPage: function gotoPreviousPage() {
-      if (this.currentPage > 1) {
-        this.currentPage--;
-        this.loadData();
-      }
-    },
-    gotoNextPage: function gotoNextPage() {
-      if (this.currentPage < this.tablePagination.last_page) {
-        this.currentPage++;
-        this.loadData();
-      }
-    },
-    gotoPage: function gotoPage(page) {
-      if (page != this.currentPage && page > 0 && page <= this.tablePagination.last_page) {
-        this.currentPage = page;
-        this.loadData();
-      }
-    },
-    isVisibleDetailRow: function isVisibleDetailRow(rowId) {
-      return this.visibleDetailRows.indexOf(rowId) >= 0;
-    },
-    showDetailRow: function showDetailRow(rowId) {
-      if (!this.isVisibleDetailRow(rowId)) {
-        this.visibleDetailRows.push(rowId);
-      }
-    },
-    hideDetailRow: function hideDetailRow(rowId) {
-      if (this.isVisibleDetailRow(rowId)) {
-        this.visibleDetailRows.splice(this.visibleDetailRows.indexOf(rowId), 1);
-      }
-    },
-    toggleDetailRow: function toggleDetailRow(rowId) {
-      if (this.isVisibleDetailRow(rowId)) {
-        this.hideDetailRow(rowId);
-      } else {
-        this.showDetailRow(rowId);
-      }
-    },
-    showField: function showField(index) {
-      if (index < 0 || index > this.tableFields.length) return;
-
-      this.tableFields[index].visible = true;
-    },
-    hideField: function hideField(index) {
-      if (index < 0 || index > this.tableFields.length) return;
-
-      this.tableFields[index].visible = false;
-    },
-    toggleField: function toggleField(index) {
-      if (index < 0 || index > this.tableFields.length) return;
-
-      this.tableFields[index].visible = !this.tableFields[index].visible;
-    },
-    renderIconTag: function renderIconTag(classes) {
-      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-
-      return typeof this.css.renderIcon === 'undefined' ? '<i class="' + classes.join(' ') + '" ' + options + '></i>' : this.css.renderIcon(classes, options);
-    },
-    makePagination: function makePagination() {
-      var total = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-      var perPage = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-      var currentPage = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-
-      var pagination = {};
-      total = total === null ? this.dataTotal : total;
-      perPage = perPage === null ? this.perPage : perPage;
-      currentPage = currentPage === null ? this.currentPage : currentPage;
-
-      return {
-        'total': total,
-        'per_page': perPage,
-        'current_page': currentPage,
-        'last_page': Math.ceil(total / perPage) || 0,
-        'next_page_url': '',
-        'prev_page_url': '',
-        'from': (currentPage - 1) * perPage + 1,
-        'to': Math.min(currentPage * perPage, total)
-      };
-    },
-    normalizeSortOrder: function normalizeSortOrder() {
-      this.sortOrder.forEach(function (item) {
-        item.sortField = item.sortField || item.field;
-      });
-    },
-    callDataManager: function callDataManager() {
-      if (this.dataManager === null && this.data === null) return;
-
-      if (Array.isArray(this.data)) {
-        console.log('data mode: array');
-        this.setData(this.data);
-      } else {
-        this.normalizeSortOrder();
-        this.setData(this.dataManager(this.sortOrder, this.makePagination()));
-      }
-    },
-    onRowClass: function onRowClass(dataItem, index) {
-      if (this.rowClassCallback !== '') {
-        this.warn('"row-class-callback" prop is deprecated, please use "row-class" prop instead.');
-        return;
-      }
-
-      if (typeof this.rowClass === 'function') {
-        return this.rowClass(dataItem, index);
-      }
-
-      return this.rowClass;
-    },
-    onRowChanged: function onRowChanged(dataItem) {
-      this.fireEvent('row-changed', dataItem);
-      return true;
-    },
-    onRowClicked: function onRowClicked(dataItem, event) {
-      this.$emit(this.eventPrefix + 'row-clicked', dataItem, event);
-      return true;
-    },
-    onRowDoubleClicked: function onRowDoubleClicked(dataItem, event) {
-      this.$emit(this.eventPrefix + 'row-dblclicked', dataItem, event);
-    },
-    onDetailRowClick: function onDetailRowClick(dataItem, event) {
-      this.$emit(this.eventPrefix + 'detail-row-clicked', dataItem, event);
-    },
-    onCellClicked: function onCellClicked(dataItem, field, event) {
-      this.$emit(this.eventPrefix + 'cell-clicked', dataItem, field, event);
-    },
-    onCellDoubleClicked: function onCellDoubleClicked(dataItem, field, event) {
-      this.$emit(this.eventPrefix + 'cell-dblclicked', dataItem, field, event);
-    },
-    onCellRightClicked: function onCellRightClicked(dataItem, field, event) {
-      this.$emit(this.eventPrefix + 'cell-rightclicked', dataItem, field, event);
-    },
-    changePage: function changePage(page) {
-      if (page === 'prev') {
-        this.gotoPreviousPage();
-      } else if (page === 'next') {
-        this.gotoNextPage();
-      } else {
-        this.gotoPage(page);
-      }
-    },
-    reload: function reload() {
-      return this.loadData();
-    },
-    refresh: function refresh() {
-      this.currentPage = 1;
-      return this.loadData();
-    },
-    resetData: function resetData() {
-      this.tableData = null;
-      this.tablePagination = null;
-      this.fireEvent('data-reset');
-    }
+    fetchFromObject: __WEBPACK_IMPORTED_MODULE_0__utils_DatasourceUtils___default.a.fetchFromObject,
+    changePage: __WEBPACK_IMPORTED_MODULE_0__utils_DatasourceUtils___default.a.changePage,
+    selectRow: __WEBPACK_IMPORTED_MODULE_0__utils_DatasourceUtils___default.a.selectRow,
+    dynamicClass: function dynamicClass(defaultClass, customClass) {
+      return defaultClass + ' ' + customClass;
+    },
+    sync: function sync(prop, value) {
+      this[prop] = value;
+    },
+    searching: function searching(e) {
+      this.selected = null;
+      this.indexSelected = -1;
+      this.current_page = 1;
+      this.$emit('searching', e.target.value);
+    },
+
+    sortColumn: __WEBPACK_IMPORTED_MODULE_0__utils_DatasourceUtils___default.a.sortColumn,
+    shouldShowUpArrow: __WEBPACK_IMPORTED_MODULE_0__utils_DatasourceUtils___default.a.shouldShowUpArrow,
+    shouldShowDownArrow: __WEBPACK_IMPORTED_MODULE_0__utils_DatasourceUtils___default.a.shouldShowDownArrow
   },
   watch: {
-    'multiSort': function multiSort(newVal, oldVal) {
-      if (newVal === false && this.sortOrder.length > 1) {
-        this.sortOrder.splice(1);
-        this.loadData();
-      }
+    perpage: function perpage() {
+      this.selected = null;
+      this.indexSelected = -1;
+      this.current_page = 1;
+      this.$emit('change', { perpage: this.perpage, page: 1 });
     },
-    'apiUrl': function apiUrl(newVal, oldVal) {
-      if (this.reactiveApiUrl && newVal !== oldVal) this.refresh();
-    },
-    'data': function data(newVal, oldVal) {
-      this.setData(newVal);
-    }
-  }
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./node_modules/vuetable-2/src/components/VuetablePagination.vue":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__VuetablePaginationMixin_vue__ = __webpack_require__("./node_modules/vuetable-2/src/components/VuetablePaginationMixin.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__VuetablePaginationMixin_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__VuetablePaginationMixin_vue__);
-
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  mixins: [__WEBPACK_IMPORTED_MODULE_0__VuetablePaginationMixin_vue___default.a]
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./node_modules/vuetable-2/src/components/VuetablePaginationInfo.vue":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__VuetablePaginationInfoMixin_vue__ = __webpack_require__("./node_modules/vuetable-2/src/components/VuetablePaginationInfoMixin.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__VuetablePaginationInfoMixin_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__VuetablePaginationInfoMixin_vue__);
-
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  mixins: [__WEBPACK_IMPORTED_MODULE_0__VuetablePaginationInfoMixin_vue___default.a]
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./node_modules/vuetable-2/src/components/VuetablePaginationInfoMixin.vue":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  props: {
-    css: {
-      type: Object,
-      default: function _default() {
-        return {
-          infoClass: 'left floated left aligned six wide column'
-        };
-      }
-    },
-    infoTemplate: {
-      type: String,
-      default: function _default() {
-        return "Displaying {from} to {to} of {total} items";
-      }
-    },
-    noDataTemplate: {
-      type: String,
-      default: function _default() {
-        return 'No relevant data';
-      }
-    }
-  },
-  data: function data() {
-    return {
-      tablePagination: null
-    };
-  },
-  computed: {
-    paginationInfo: function paginationInfo() {
-      if (this.tablePagination == null || this.tablePagination.total == 0) {
-        return this.noDataTemplate;
-      }
-
-      return this.infoTemplate.replace('{from}', this.tablePagination.from || 0).replace('{to}', this.tablePagination.to || 0).replace('{total}', this.tablePagination.total || 0);
-    }
-  },
-  methods: {
-    setPaginationData: function setPaginationData(tablePagination) {
-      this.tablePagination = tablePagination;
-    },
-    resetData: function resetData() {
-      this.tablePagination = null;
-    }
-  }
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./node_modules/vuetable-2/src/components/VuetablePaginationMixin.vue":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  props: {
-    css: {
-      type: Object,
-      default: function _default() {
-        return {
-          wrapperClass: 'ui right floated pagination menu',
-          activeClass: 'active large',
-          disabledClass: 'disabled',
-          pageClass: 'item',
-          linkClass: 'icon item',
-          paginationClass: 'ui bottom attached segment grid',
-          paginationInfoClass: 'left floated left aligned six wide column',
-          dropdownClass: 'ui search dropdown',
-          icons: {
-            first: 'angle double left icon',
-            prev: 'left chevron icon',
-            next: 'right chevron icon',
-            last: 'angle double right icon'
-          }
-        };
-      }
-    },
-    onEachSide: {
-      type: Number,
-      default: function _default() {
-        return 2;
-      }
-    }
-  },
-  data: function data() {
-    return {
-      eventPrefix: 'vuetable-pagination:',
-      tablePagination: null
-    };
-  },
-  computed: {
-    totalPage: function totalPage() {
-      return this.tablePagination === null ? 0 : this.tablePagination.last_page;
-    },
-    isOnFirstPage: function isOnFirstPage() {
-      return this.tablePagination === null ? false : this.tablePagination.current_page === 1;
-    },
-    isOnLastPage: function isOnLastPage() {
-      return this.tablePagination === null ? false : this.tablePagination.current_page === this.tablePagination.last_page;
-    },
-    notEnoughPages: function notEnoughPages() {
-      return this.totalPage < this.onEachSide * 2 + 4;
-    },
-    windowSize: function windowSize() {
-      return this.onEachSide * 2 + 1;
-    },
-    windowStart: function windowStart() {
-      if (!this.tablePagination || this.tablePagination.current_page <= this.onEachSide) {
-        return 1;
-      } else if (this.tablePagination.current_page >= this.totalPage - this.onEachSide) {
-        return this.totalPage - this.onEachSide * 2;
-      }
-
-      return this.tablePagination.current_page - this.onEachSide;
-    }
-  },
-  methods: {
-    loadPage: function loadPage(page) {
-      this.$emit(this.eventPrefix + 'change-page', page);
-    },
-    isCurrentPage: function isCurrentPage(page) {
-      return page === this.tablePagination.current_page;
-    },
-    setPaginationData: function setPaginationData(tablePagination) {
-      this.tablePagination = tablePagination;
-    },
-    resetData: function resetData() {
-      this.tablePagination = null;
+    source: function source() {
+      this.selected = null;
+      this.indexSelected = -1;
     }
   }
 });
@@ -2760,126 +2234,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/User/UserAction.vue":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    props: {
-        rowData: {
-            type: Object,
-            required: true
-        },
-        rowIndex: {
-            type: Number
-        }
-    },
-    methods: {
-        itemAction: function itemAction(action, data, index) {
-            console.log('custom-actions: ' + action, data.name, index);
-        }
-    }
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/User/UserDetail.vue":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    props: {
-        rowData: {
-            type: Object,
-            required: true
-        },
-        rowIndex: {
-            type: Number
-        }
-    },
-    methods: {
-        onClick: function onClick(event) {
-            console.log('my-detail-row: on-click', event.target);
-        }
-    }
-});
-
-/***/ }),
-
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/User/UserTable.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuetable_2_src_components_Vuetable__ = __webpack_require__("./node_modules/vuetable-2/src/components/Vuetable.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuetable_2_src_components_Vuetable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vuetable_2_src_components_Vuetable__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuetable_2_src_components_VuetablePagination__ = __webpack_require__("./node_modules/vuetable-2/src/components/VuetablePagination.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuetable_2_src_components_VuetablePagination___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vuetable_2_src_components_VuetablePagination__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuetable_2_src_components_VuetablePaginationInfo__ = __webpack_require__("./node_modules/vuetable-2/src/components/VuetablePaginationInfo.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuetable_2_src_components_VuetablePaginationInfo___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_vuetable_2_src_components_VuetablePaginationInfo__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue__ = __webpack_require__("./node_modules/vue/dist/vue.common.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vue_events__ = __webpack_require__("./node_modules/vue-events/dist/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vue_events___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_vue_events__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__UserAction_vue__ = __webpack_require__("./resources/assets/js/components/User/UserAction.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__UserAction_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__UserAction_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__UserDetail_vue__ = __webpack_require__("./resources/assets/js/components/User/UserDetail.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__UserDetail_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__UserDetail_vue__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_datasource__ = __webpack_require__("./node_modules/vue-datasource/src/index.js");
 //
 //
 //
@@ -2890,124 +2250,37 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-//import accounting from 'accounting'
-//import moment from 'moment'
 
-
-
-
-
-
-
-__WEBPACK_IMPORTED_MODULE_3_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_4_vue_events___default.a);
-__WEBPACK_IMPORTED_MODULE_3_vue___default.a.component('user-actions', __WEBPACK_IMPORTED_MODULE_5__UserAction_vue___default.a);
-__WEBPACK_IMPORTED_MODULE_3_vue___default.a.component('user-filter-bar', __WEBPACK_IMPORTED_MODULE_6__UserDetail_vue___default.a);
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: {
-        Vuetable: __WEBPACK_IMPORTED_MODULE_0_vuetable_2_src_components_Vuetable___default.a,
-        VuetablePagination: __WEBPACK_IMPORTED_MODULE_1_vuetable_2_src_components_VuetablePagination___default.a,
-        VuetablePaginationInfo: __WEBPACK_IMPORTED_MODULE_2_vuetable_2_src_components_VuetablePaginationInfo___default.a
+        ServerDatasource: __WEBPACK_IMPORTED_MODULE_0_vue_datasource__["a" /* ServerDatasource */]
     },
     data: function data() {
         return {
-            fields: [{
-                name: 'id',
-                title: '#',
-                titleClass: 'text-right',
-                dataClass: 'text-right'
+            columns: [{
+                name: '#',
+                key: 'id'
             }, {
-                name: '__checkbox',
-                titleClass: 'text-center',
-                dataClass: 'text-center'
+                name: 'Nome',
+                key: 'name'
             }, {
-                name: 'name',
-                sortField: 'name'
-            }, {
-                name: 'email',
-                sortField: 'email'
-            }, {
-                name: '__component:user-actions',
-                title: 'Actions',
-                titleClass: 'text-center',
-                dataClass: 'text-center'
+                name: 'Email',
+                key: 'email'
             }],
-            css: {
-                table: {
-                    tableClass: 'table table-condensed table-bordered table-striped table-hover',
-                    ascendingIcon: 'icon-arrow-up12',
-                    descendingIcon: 'icon-arrow-down12'
+            actions: [{
+                text: 'Click me',
+                icon: 'icon-pencil5',
+                class: 'btn-primary',
+                show: function show(selectedRow) {
+                    // Event to define a condition to display the button with the selected row
+                    return true;
                 },
-                pagination: {
-                    wrapperClass: 'pagination',
-                    activeClass: 'active',
-                    disabledClass: 'disabled',
-                    pageClass: 'page',
-                    linkClass: 'link',
-                    icons: {
-                        first: '',
-                        prev: '',
-                        next: '',
-                        last: ''
-                    }
-                },
-                icons: {
-                    first: 'icon-previous2',
-                    prev: 'icon-backward2',
-                    next: 'icon-forward3',
-                    last: 'icon-next2'
+                event: function event(e, row) {
+                    // Event handler callback. Gets event instace and selected row
+                    console.log('Click row: ', row); // If no row is selected, row will be NULL
                 }
-            },
-            sortOrder: [{ field: 'email', sortField: 'email', direction: 'asc' }],
-            moreParams: {}
+            }]
         };
-    },
-
-    methods: {
-        allcap: function allcap(value) {
-            return value.toUpperCase();
-        },
-        genderLabel: function genderLabel(value) {
-            return value === 'M' ? '<span class="label label-success"><i class="icon-star-full2"></i> Male</span>' : '<span class="label label-danger"><i class="icon-heart5"></i> Female</span>';
-        },
-        formatNumber: function formatNumber(value) {
-            return accounting.formatNumber(value, 2);
-        },
-        formatDate: function formatDate(value) {
-            var fmt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'D MMM YYYY';
-
-            return value == null ? '' : moment(value, 'YYYY-MM-DD').format(fmt);
-        },
-        onPaginationData: function onPaginationData(paginationData) {
-            this.$refs.pagination.setPaginationData(paginationData);
-            this.$refs.paginationInfo.setPaginationData(paginationData);
-        },
-        onChangePage: function onChangePage(page) {
-            this.$refs.vuetable.changePage(page);
-        },
-        onCellClicked: function onCellClicked(data, field, event) {
-            console.log('cellClicked: ', field.name);
-            this.$refs.vuetable.toggleDetailRow(data.id);
-        }
-    },
-    events: {
-        'filter-set': function filterSet(filterText) {
-            var _this = this;
-
-            this.moreParams = {
-                filter: filterText
-            };
-            __WEBPACK_IMPORTED_MODULE_3_vue___default.a.nextTick(function () {
-                return _this.$refs.vuetable.refresh();
-            });
-        },
-        'filter-reset': function filterReset() {
-            var _this2 = this;
-
-            this.moreParams = {};
-            __WEBPACK_IMPORTED_MODULE_3_vue___default.a.nextTick(function () {
-                return _this2.$refs.vuetable.refresh();
-            });
-        }
     }
 });
 
@@ -5397,7 +4670,7 @@ if (typeof jQuery === 'undefined') {
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0e633b8a\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./node_modules/vuetable-2/src/components/Vuetable.vue":
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3232d9e8\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./node_modules/vue-datasource/src/components/Pagination.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(undefined);
@@ -5405,14 +4678,14 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n[v-cloak][data-v-0e633b8a] {\n  display: none;\n}\n.vuetable th.sortable[data-v-0e633b8a]:hover {\n  color: #2185d0;\n  cursor: pointer;\n}\n.vuetable-body-wrapper[data-v-0e633b8a] {\n  position:relative;\n  overflow-y:auto;\n}\n.vuetable-head-wrapper[data-v-0e633b8a] {\n  overflow-x: hidden;\n}\n.vuetable-actions[data-v-0e633b8a] {\n  width: 15%;\n  padding: 12px 0px;\n  text-align: center;\n}\n.vuetable-pagination[data-v-0e633b8a] {\n  background: #f9fafb !important;\n}\n.vuetable-pagination-info[data-v-0e633b8a] {\n  margin-top: auto;\n  margin-bottom: auto;\n}\n.vuetable-empty-result[data-v-0e633b8a] {\n  text-align: center;\n}\n.vuetable-clip-text[data-v-0e633b8a] {\n  white-space: pre-wrap;\n  text-overflow: ellipsis;\n  overflow: hidden;\n  display: block;\n}\n.vuetable-semantic-no-top[data-v-0e633b8a] {\n  border-top:none !important;\n  margin-top:0 !important;\n}\n.vuetable-fixed-layout[data-v-0e633b8a] {\n  table-layout: fixed;\n}\n.vuetable-gutter-col[data-v-0e633b8a] {\n  padding: 0 !important;\n  border-left: none  !important;\n  border-right: none  !important;\n}\n", ""]);
+exports.push([module.i, "\n.vue-pagination nav .pagination[data-v-3232d9e8] {\n    margin: 10px 0\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4b8060ea\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/components/User/UserAction.vue":
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7706864c\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./node_modules/vue-datasource/src/components/ServerDatasource.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(undefined);
@@ -5420,7 +4693,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n.custom-actions button.ui.button {\n    padding: 8px 8px;\n}\n.custom-actions button.ui.button > i.icon {\n    margin: auto !important;\n}\n", ""]);
+exports.push([module.i, "\n.vue-server-datasource .panel-body[data-v-7706864c] {\n  position: relative;\n  padding: 0;\n}\n.vue-server-datasource .vue-server-arrows[data-v-7706864c] {\n  position: absolute;\n  right: 5px;\n  top: 6px;\n}\n.vue-server-datasource table[data-v-7706864c] {\n  margin-bottom: 0;\n}\n.vue-server-datasource table th[data-v-7706864c] {\n    position: relative;\n}\n.vue-server-datasource table th.vue-server-ordering[data-v-7706864c] {\n      cursor: pointer;\n}\n.vue-server-datasource table th.vue-server-ordering .vue-server-arrows img[data-v-7706864c] {\n        opacity: .3;\n}\n.vue-server-datasource table th.vue-server-ordering .vue-server-arrows img.arrow-active[data-v-7706864c] {\n          opacity: 1;\n}\n.vue-server-datasource .panel-footer .btn-group-actions[data-v-7706864c] {\n  margin: 10px 0;\n}\n.vue-server-datasource .vue-spinner-wrapper[data-v-7706864c] {\n  position: absolute;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  background: rgba(229, 229, 229, 0.5);\n}\n.vue-server-datasource .vue-spinner-wrapper .v-spinner[data-v-7706864c] {\n    position: absolute;\n    top: 50%;\n    left: 50%;\n    margin-left: -25px;\n    margin-top: -50px;\n}\n.pr1[data-v-7706864c] {\n  padding-right: 5px;\n}\n.pr2[data-v-7706864c] {\n  padding-right: 10px;\n}\n.mr1[data-v-7706864c] {\n  margin-right: 5px;\n}\n", ""]);
 
 // exports
 
@@ -5435,7 +4708,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n.pagination {\n    margin: 0;\n    float: right;\n}\n.pagination a.page {\n    border: 1px solid lightgray;\n    border-radius: 3px;\n    padding: 5px 10px;\n    margin-right: 2px;\n}\n.pagination a.page.active {\n    color: white;\n    background-color: #337ab7;\n    border: 1px solid lightgray;\n    border-radius: 3px;\n    padding: 5px 10px;\n    margin-right: 2px;\n}\n.pagination a.btn-nav {\n    border: 1px solid lightgray;\n    border-radius: 3px;\n    padding: 5px 7px;\n    margin-right: 2px;\n}\n.pagination a.btn-nav.disabled {\n    color: lightgray;\n    border: 1px solid lightgray;\n    border-radius: 3px;\n    padding: 5px 7px;\n    margin-right: 2px;\n    cursor: not-allowed;\n}\n.pagination-info {\n    float: left;\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -36046,161 +35319,275 @@ exports.clearImmediate = clearImmediate;
 
 /***/ }),
 
-/***/ "./node_modules/vue-events/dist/index.js":
+/***/ "./node_modules/vue-datasource/src/components/Pagination.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3232d9e8\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./node_modules/vue-datasource/src/components/Pagination.vue")
+}
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./node_modules/vue-datasource/src/components/Pagination.vue")
+/* template */
+var __vue_template__ = null
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-3232d9e8"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "node_modules\\vue-datasource\\src\\components\\Pagination.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-3232d9e8", Component.options)
+  } else {
+    hotAPI.reload("data-v-3232d9e8", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-datasource/src/components/ServerDatasource.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7706864c\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./node_modules/vue-datasource/src/components/ServerDatasource.vue")
+}
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./node_modules/vue-datasource/src/components/ServerDatasource.vue")
+/* template */
+var __vue_template__ = null
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-7706864c"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "node_modules\\vue-datasource\\src\\components\\ServerDatasource.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-7706864c", Component.options)
+  } else {
+    hotAPI.reload("data-v-7706864c", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-datasource/src/index.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_ServerDatasource_vue__ = __webpack_require__("./node_modules/vue-datasource/src/components/ServerDatasource.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_ServerDatasource_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_ServerDatasource_vue__);
+/* harmony reexport (default from non-hamory) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__components_ServerDatasource_vue___default.a; });
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-datasource/src/utils/DatasourceUtils.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = ({
+  /**
+   * Find the element value using Recursive Method and return the value rendered if it's defined
+   * @param obj
+   * @param column
+   * @param render
+   * @returns {*}
+   */
+  fetchFromObject (obj, column, render) {
+    if (typeof obj === 'undefined') return false
+    let _index = column.indexOf('.')
+    if (_index > -1) {
+      return this.fetchFromObject(obj[column.substring(0, _index)], column.substr(_index + 1))
+    }
+    if (typeof render !== 'undefined') {
+      return render(obj[column], obj)
+    }
+    return obj[column]
+  },
+
+  /**
+   * Emit event to change page from pagination
+   * @param page
+   * @return {void}
+   */
+  changePage (page) {
+    this.selected = null
+    this.indexSelected = -1
+    this.current_page = page
+    this.$emit('change', { perpage: this.perpage, page: page })
+  },
+
+  /**
+   * Effect toggle to selected row
+   * @param row
+   * @param index
+   * @return {void}
+   */
+  selectRow (e, row, index) {
+    e.preventDefault()
+    if (this.indexSelected === index) {
+      this.indexSelected = -1
+      this.selected = null
+    } else {
+      this.indexSelected = index
+      this.selected = {
+        'row': row,
+        'index': index
+      }
+    }
+  },
+
+  /**
+   * Computed property: Build custom array with the pagination items
+   * @return Array
+   */
+  gettingItems () {
+    let temp = []
+    let bottomLimit = this.currentPage - 2
+    let topLimit = this.currentPage + 2
+    let showing = 5
+    if (bottomLimit <= 0) {
+      bottomLimit = 1
+      topLimit = 5
+    }
+    if (topLimit >= this.lastPage) {
+      bottomLimit = this.lastPage - 4
+      topLimit = this.lastPage
+    }
+    if (this.lastPage < 5) {
+      showing = this.lastPage
+    }
+    if (bottomLimit <= 0) {
+      bottomLimit = 1
+    }
+    if (this.lastPage === 0 || this.lastPage === 1) {
+      showing = 1
+    }
+    for (let i = 0; i < showing; i++) {
+      temp[i] = i + bottomLimit
+    }
+    return temp
+  },
+
+  /**
+   * Function to $emit a sort event
+   * @param {Exception} e
+   * @param {String} key
+   * @return void
+   */
+  sortColumn (e, key) {
+    if (this.columnSortSelected.key === key) {
+      this.columnSortSelected.order = !this.columnSortSelected.order
+    } else {
+      this.columnSortSelected.order = false
+      this.columnSortSelected.key = key
+    }
+    let sortType = (this.columnSortSelected.order) ? 'ASC' : 'DESC'
+    this.$emit('column-sort', { sort: this.columnSortSelected, type: sortType })
+  },
+
+  /**
+   * Function to show up arrow
+   * @param {String} key
+   * @return Boolean
+   */
+  shouldShowUpArrow (key) {
+    return (this.columnSortSelected.key === key) && (this.columnSortSelected.order === true)
+  },
+
+  /**
+   * Function to show down arrow
+   * @param {String} key
+   * @return Boolean
+   */
+  shouldShowDownArrow (key) {
+    return (this.columnSortSelected.key === key) && (this.columnSortSelected.order === false)
+  },
+
+  /**
+   * Function to get a value rounded
+   * @param {Number} value
+   * @param {Number} precision
+   * @return Number
+   */
+  roundNumber (value, precision) {
+    let multiplier = Math.pow(10, precision || 0)
+    return Math.round(value * multiplier) / multiplier
+  }
 });
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-function plugin(Vue) {
+/***/ }),
 
-  // Exit if the plugin has already been installed.
-  if (plugin.installed) return;
+/***/ "./node_modules/vue-datasource/src/utils/EventBus.js":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-  // Create a `vm` to serve as our global event bus.
-  var events = new Vue({
-    methods: {
-      /**
-       * Emit the given event.
-       *
-       * @param {string|object} event
-       * @param {...*} args
-       */
-      emit: function emit(event) {
-        for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-          args[_key - 1] = arguments[_key];
-        }
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__("./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 
-        this.$emit.apply(this, [event].concat(args));
-      },
+const EventBus = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a()
+/* harmony export (immutable) */ __webpack_exports__["a"] = EventBus;
 
 
-      /**
-       * Emit the given event.
-       *
-       * @param {string|object} event
-       * @param {...*} args
-       */
-      fire: function fire(event) {
-        for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-          args[_key2 - 1] = arguments[_key2];
-        }
-
-        this.emit.apply(this, [event].concat(args));
-      },
-
-
-      /**
-       * Listen for the given event.
-       *
-       * @param {string} event
-       * @param {function} callback
-       */
-      on: function on(event, callback) {
-        this.$on(event, callback);
-      },
-
-
-      /**
-       * Listen for the given event.
-       *
-       * @param {string} event
-       * @param {function} callback
-       */
-      listen: function listen(event, callback) {
-        this.on(event, callback);
-      },
-
-
-      /**
-       * Listen for the given event once.
-       *
-       * @param {string} event
-       * @param {function} callback
-       */
-      once: function once(event, callback) {
-        this.$once(event, callback);
-      },
-
-
-      /**
-       * Remove one or more event listeners.
-       *
-       * @param {string} event
-       * @param {function} callback
-       */
-      off: function off(event, callback) {
-        this.$off(event, callback);
-      },
-
-
-      /**
-       * Remove one or more event listeners.
-       *
-       * @param {string} event
-       * @param {function} callback
-       */
-      remove: function remove(event, callback) {
-        this.off(event, callback);
-      }
-    }
-  });
-
-  // Extend `Vue.prototype` to include our global event bus.
-  Object.defineProperty(Vue.prototype, '$events', {
-    get: function get() {
-      return events;
-    }
-  });
-
-  // Register a mixin that adds an `events` option to Vue 2.0 components.
-  Vue.mixin({
-    // Hook into the Vue 2.0 `beforeCreate` life-cycle event.
-    beforeCreate: function beforeCreate() {
-      // Exit if there's no `events` option.
-      if (_typeof(this.$options.events) !== 'object') return;
-      // Cache of events to bound functions for automatic unsubscriptions
-      var eventMap = {};
-      // Loop through each event.
-      for (var key in this.$options.events) {
-        // Assign event type and bound function to map
-        eventMap[key] = this.$options.events[key].bind(this);
-      }
-      // Listen for the `hook:beforeMount` Vue 2.0 life-cycle event.
-      this.$once('hook:beforeMount', function () {
-        // Loop through each event.
-        for (var key in eventMap) {
-          // Register a listener for the event.
-          events.$on(key, eventMap[key]);
-        }
-      });
-      // Listen for the `hook:beforeDestroy` Vue 2.0 life-cycle event.
-      this.$once('hook:beforeDestroy', function () {
-        // Loop through each event.
-        for (var key in eventMap) {
-          // Register a listener for the event.
-          events.$off(key, eventMap[key]);
-        }
-        // Release cache
-        eventMap = null;
-      });
-    }
-  });
-}
-
-// Check for `window.Vue`
-if (typeof window !== 'undefined' && window.Vue) {
-  // Install plugin automatically.
-  window.Vue.use(plugin);
-}
-
-exports.default = plugin;
 
 /***/ }),
 
@@ -36314,949 +35701,6 @@ module.exports = function normalizeComponent (
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-0e633b8a\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./node_modules/vuetable-2/src/components/Vuetable.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _vm.isFixedHeader
-    ? _c("div", [
-        _c("div", { staticClass: "vuetable-head-wrapper" }, [
-          _c(
-            "table",
-            {
-              class: ["vuetable", _vm.css.tableClass, _vm.css.tableHeaderClass]
-            },
-            [
-              _c("thead", [
-                _c(
-                  "tr",
-                  [
-                    _vm._l(_vm.tableFields, function(field) {
-                      return [
-                        field.visible
-                          ? [
-                              _vm.isSpecialField(field.name)
-                                ? [
-                                    _vm.extractName(field.name) == "__checkbox"
-                                      ? _c(
-                                          "th",
-                                          {
-                                            class: [
-                                              "vuetable-th-checkbox-" +
-                                                _vm.trackBy,
-                                              field.titleClass
-                                            ],
-                                            style: { width: field.width }
-                                          },
-                                          [
-                                            _c("input", {
-                                              attrs: { type: "checkbox" },
-                                              domProps: {
-                                                checked: _vm.checkCheckboxesState(
-                                                  field.name
-                                                )
-                                              },
-                                              on: {
-                                                change: function($event) {
-                                                  _vm.toggleAllCheckboxes(
-                                                    field.name,
-                                                    $event
-                                                  )
-                                                }
-                                              }
-                                            })
-                                          ]
-                                        )
-                                      : _vm._e(),
-                                    _vm._v(" "),
-                                    _vm.extractName(field.name) == "__component"
-                                      ? _c("th", {
-                                          class: [
-                                            "vuetable-th-component-" +
-                                              _vm.trackBy,
-                                            field.titleClass,
-                                            { sortable: _vm.isSortable(field) }
-                                          ],
-                                          style: { width: field.width },
-                                          domProps: {
-                                            innerHTML: _vm._s(
-                                              _vm.renderTitle(field)
-                                            )
-                                          },
-                                          on: {
-                                            click: function($event) {
-                                              _vm.orderBy(field, $event)
-                                            }
-                                          }
-                                        })
-                                      : _vm._e(),
-                                    _vm._v(" "),
-                                    _vm.extractName(field.name) == "__slot"
-                                      ? _c("th", {
-                                          class: [
-                                            "vuetable-th-slot-" +
-                                              _vm.extractArgs(field.name),
-                                            field.titleClass,
-                                            { sortable: _vm.isSortable(field) }
-                                          ],
-                                          style: { width: field.width },
-                                          domProps: {
-                                            innerHTML: _vm._s(
-                                              _vm.renderTitle(field)
-                                            )
-                                          },
-                                          on: {
-                                            click: function($event) {
-                                              _vm.orderBy(field, $event)
-                                            }
-                                          }
-                                        })
-                                      : _vm._e(),
-                                    _vm._v(" "),
-                                    _vm.extractName(field.name) == "__sequence"
-                                      ? _c("th", {
-                                          class: [
-                                            "vuetable-th-sequence",
-                                            field.titleClass || ""
-                                          ],
-                                          style: { width: field.width },
-                                          domProps: {
-                                            innerHTML: _vm._s(
-                                              _vm.renderTitle(field)
-                                            )
-                                          }
-                                        })
-                                      : _vm._e(),
-                                    _vm._v(" "),
-                                    _vm.notIn(_vm.extractName(field.name), [
-                                      "__sequence",
-                                      "__checkbox",
-                                      "__component",
-                                      "__slot"
-                                    ])
-                                      ? _c("th", {
-                                          class: [
-                                            "vuetable-th-" + field.name,
-                                            field.titleClass || ""
-                                          ],
-                                          style: { width: field.width },
-                                          domProps: {
-                                            innerHTML: _vm._s(
-                                              _vm.renderTitle(field)
-                                            )
-                                          }
-                                        })
-                                      : _vm._e()
-                                  ]
-                                : [
-                                    _c("th", {
-                                      class: [
-                                        "vuetable-th-" + field.name,
-                                        field.titleClass,
-                                        { sortable: _vm.isSortable(field) }
-                                      ],
-                                      style: { width: field.width },
-                                      attrs: { id: "_" + field.name },
-                                      domProps: {
-                                        innerHTML: _vm._s(
-                                          _vm.renderTitle(field)
-                                        )
-                                      },
-                                      on: {
-                                        click: function($event) {
-                                          _vm.orderBy(field, $event)
-                                        }
-                                      }
-                                    })
-                                  ]
-                            ]
-                          : _vm._e()
-                      ]
-                    }),
-                    _vm._v(" "),
-                    _vm.scrollVisible
-                      ? _c("th", {
-                          staticClass: "vuetable-gutter-col",
-                          style: { width: _vm.scrollBarWidth }
-                        })
-                      : _vm._e()
-                  ],
-                  2
-                )
-              ])
-            ]
-          )
-        ]),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass: "vuetable-body-wrapper",
-            style: { height: _vm.tableHeight }
-          },
-          [
-            _c(
-              "table",
-              {
-                class: ["vuetable", _vm.css.tableClass, _vm.css.tableBodyClass]
-              },
-              [
-                _c(
-                  "colgroup",
-                  [
-                    _vm._l(_vm.tableFields, function(field) {
-                      return [
-                        field.visible
-                          ? [
-                              [
-                                _c("col", {
-                                  class: [
-                                    "vuetable-th-" + field.name,
-                                    field.titleClass
-                                  ],
-                                  style: { width: field.width },
-                                  attrs: { id: "_col_" + field.name }
-                                })
-                              ]
-                            ]
-                          : _vm._e()
-                      ]
-                    })
-                  ],
-                  2
-                ),
-                _vm._v(" "),
-                _c(
-                  "tbody",
-                  { staticClass: "vuetable-body" },
-                  [
-                    _vm._l(_vm.tableData, function(item, index) {
-                      return [
-                        _c(
-                          "tr",
-                          {
-                            class: _vm.onRowClass(item, index),
-                            attrs: {
-                              "item-index": index,
-                              render: _vm.onRowChanged(item)
-                            },
-                            on: {
-                              dblclick: function($event) {
-                                _vm.onRowDoubleClicked(item, $event)
-                              },
-                              click: function($event) {
-                                _vm.onRowClicked(item, $event)
-                              }
-                            }
-                          },
-                          [
-                            _vm._l(_vm.tableFields, function(field) {
-                              return [
-                                field.visible
-                                  ? [
-                                      _vm.isSpecialField(field.name)
-                                        ? [
-                                            _vm.extractName(field.name) ==
-                                            "__sequence"
-                                              ? _c("td", {
-                                                  class: [
-                                                    "vuetable-sequence",
-                                                    field.dataClass
-                                                  ],
-                                                  domProps: {
-                                                    innerHTML: _vm._s(
-                                                      _vm.renderSequence(index)
-                                                    )
-                                                  }
-                                                })
-                                              : _vm._e(),
-                                            _vm._v(" "),
-                                            _vm.extractName(field.name) ==
-                                            "__handle"
-                                              ? _c("td", {
-                                                  class: [
-                                                    "vuetable-handle",
-                                                    field.dataClass
-                                                  ],
-                                                  domProps: {
-                                                    innerHTML: _vm._s(
-                                                      _vm.renderIconTag([
-                                                        "handle-icon",
-                                                        _vm.css.handleIcon
-                                                      ])
-                                                    )
-                                                  }
-                                                })
-                                              : _vm._e(),
-                                            _vm._v(" "),
-                                            _vm.extractName(field.name) ==
-                                            "__checkbox"
-                                              ? _c(
-                                                  "td",
-                                                  {
-                                                    class: [
-                                                      "vuetable-checkboxes",
-                                                      field.dataClass
-                                                    ]
-                                                  },
-                                                  [
-                                                    _c("input", {
-                                                      attrs: {
-                                                        type: "checkbox"
-                                                      },
-                                                      domProps: {
-                                                        checked: _vm.rowSelected(
-                                                          item,
-                                                          field.name
-                                                        )
-                                                      },
-                                                      on: {
-                                                        change: function(
-                                                          $event
-                                                        ) {
-                                                          _vm.toggleCheckbox(
-                                                            item,
-                                                            field.name,
-                                                            $event
-                                                          )
-                                                        }
-                                                      }
-                                                    })
-                                                  ]
-                                                )
-                                              : _vm._e(),
-                                            _vm._v(" "),
-                                            _vm.extractName(field.name) ===
-                                            "__component"
-                                              ? _c(
-                                                  "td",
-                                                  {
-                                                    class: [
-                                                      "vuetable-component",
-                                                      field.dataClass
-                                                    ]
-                                                  },
-                                                  [
-                                                    _c(
-                                                      _vm.extractArgs(
-                                                        field.name
-                                                      ),
-                                                      {
-                                                        tag: "component",
-                                                        attrs: {
-                                                          "row-data": item,
-                                                          "row-index": index,
-                                                          "row-field":
-                                                            field.sortField
-                                                        }
-                                                      }
-                                                    )
-                                                  ],
-                                                  1
-                                                )
-                                              : _vm._e(),
-                                            _vm._v(" "),
-                                            _vm.extractName(field.name) ===
-                                            "__slot"
-                                              ? _c(
-                                                  "td",
-                                                  {
-                                                    class: [
-                                                      "vuetable-slot",
-                                                      field.dataClass
-                                                    ]
-                                                  },
-                                                  [
-                                                    _vm._t(
-                                                      _vm.extractArgs(
-                                                        field.name
-                                                      ),
-                                                      null,
-                                                      {
-                                                        rowData: item,
-                                                        rowIndex: index,
-                                                        rowField:
-                                                          field.sortField
-                                                      }
-                                                    )
-                                                  ],
-                                                  2
-                                                )
-                                              : _vm._e()
-                                          ]
-                                        : [
-                                            _c("td", {
-                                              class: field.dataClass,
-                                              domProps: {
-                                                innerHTML: _vm._s(
-                                                  _vm.renderNormalField(
-                                                    field,
-                                                    item
-                                                  )
-                                                )
-                                              },
-                                              on: {
-                                                click: function($event) {
-                                                  _vm.onCellClicked(
-                                                    item,
-                                                    field,
-                                                    $event
-                                                  )
-                                                },
-                                                dblclick: function($event) {
-                                                  _vm.onCellDoubleClicked(
-                                                    item,
-                                                    field,
-                                                    $event
-                                                  )
-                                                },
-                                                contextmenu: function($event) {
-                                                  _vm.onCellRightClicked(
-                                                    item,
-                                                    field,
-                                                    $event
-                                                  )
-                                                }
-                                              }
-                                            })
-                                          ]
-                                    ]
-                                  : _vm._e()
-                              ]
-                            })
-                          ],
-                          2
-                        ),
-                        _vm._v(" "),
-                        _vm.useDetailRow
-                          ? [
-                              _vm.isVisibleDetailRow(item[_vm.trackBy])
-                                ? _c(
-                                    "tr",
-                                    {
-                                      class: [_vm.css.detailRowClass],
-                                      on: {
-                                        click: function($event) {
-                                          _vm.onDetailRowClick(item, $event)
-                                        }
-                                      }
-                                    },
-                                    [
-                                      _c(
-                                        "transition",
-                                        {
-                                          attrs: {
-                                            name: _vm.detailRowTransition
-                                          }
-                                        },
-                                        [
-                                          _c(
-                                            "td",
-                                            {
-                                              attrs: {
-                                                colspan: _vm.countVisibleFields
-                                              }
-                                            },
-                                            [
-                                              _c(_vm.detailRowComponent, {
-                                                tag: "component",
-                                                attrs: {
-                                                  "row-data": item,
-                                                  "row-index": index
-                                                }
-                                              })
-                                            ],
-                                            1
-                                          )
-                                        ]
-                                      )
-                                    ],
-                                    1
-                                  )
-                                : _vm._e()
-                            ]
-                          : _vm._e()
-                      ]
-                    }),
-                    _vm._v(" "),
-                    _vm.displayEmptyDataRow
-                      ? [
-                          _c("tr", [
-                            _c(
-                              "td",
-                              {
-                                staticClass: "vuetable-empty-result",
-                                attrs: { colspan: _vm.countVisibleFields }
-                              },
-                              [_vm._v(_vm._s(_vm.noDataTemplate))]
-                            )
-                          ])
-                        ]
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.lessThanMinRows
-                      ? _vm._l(_vm.blankRows, function(i) {
-                          return _c(
-                            "tr",
-                            { staticClass: "blank-row" },
-                            [
-                              _vm._l(_vm.tableFields, function(field) {
-                                return [
-                                  field.visible
-                                    ? _c("td", [_vm._v(" ")])
-                                    : _vm._e()
-                                ]
-                              })
-                            ],
-                            2
-                          )
-                        })
-                      : _vm._e()
-                  ],
-                  2
-                )
-              ]
-            )
-          ]
-        )
-      ])
-    : _c("table", { class: ["vuetable", _vm.css.tableClass] }, [
-        _c("thead", [
-          _c(
-            "tr",
-            [
-              _vm._l(_vm.tableFields, function(field) {
-                return [
-                  field.visible
-                    ? [
-                        _vm.isSpecialField(field.name)
-                          ? [
-                              _vm.extractName(field.name) == "__checkbox"
-                                ? _c(
-                                    "th",
-                                    {
-                                      class: [
-                                        "vuetable-th-checkbox-" + _vm.trackBy,
-                                        field.titleClass
-                                      ],
-                                      style: { width: field.width }
-                                    },
-                                    [
-                                      _c("input", {
-                                        attrs: { type: "checkbox" },
-                                        domProps: {
-                                          checked: _vm.checkCheckboxesState(
-                                            field.name
-                                          )
-                                        },
-                                        on: {
-                                          change: function($event) {
-                                            _vm.toggleAllCheckboxes(
-                                              field.name,
-                                              $event
-                                            )
-                                          }
-                                        }
-                                      })
-                                    ]
-                                  )
-                                : _vm._e(),
-                              _vm._v(" "),
-                              _vm.extractName(field.name) == "__component"
-                                ? _c("th", {
-                                    class: [
-                                      "vuetable-th-component-" + _vm.trackBy,
-                                      field.titleClass,
-                                      { sortable: _vm.isSortable(field) }
-                                    ],
-                                    style: { width: field.width },
-                                    domProps: {
-                                      innerHTML: _vm._s(_vm.renderTitle(field))
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        _vm.orderBy(field, $event)
-                                      }
-                                    }
-                                  })
-                                : _vm._e(),
-                              _vm._v(" "),
-                              _vm.extractName(field.name) == "__slot"
-                                ? _c("th", {
-                                    class: [
-                                      "vuetable-th-slot-" +
-                                        _vm.extractArgs(field.name),
-                                      field.titleClass,
-                                      { sortable: _vm.isSortable(field) }
-                                    ],
-                                    style: { width: field.width },
-                                    domProps: {
-                                      innerHTML: _vm._s(_vm.renderTitle(field))
-                                    },
-                                    on: {
-                                      click: function($event) {
-                                        _vm.orderBy(field, $event)
-                                      }
-                                    }
-                                  })
-                                : _vm._e(),
-                              _vm._v(" "),
-                              _vm.extractName(field.name) == "__sequence"
-                                ? _c("th", {
-                                    class: [
-                                      "vuetable-th-sequence",
-                                      field.titleClass || ""
-                                    ],
-                                    style: { width: field.width },
-                                    domProps: {
-                                      innerHTML: _vm._s(_vm.renderTitle(field))
-                                    }
-                                  })
-                                : _vm._e(),
-                              _vm._v(" "),
-                              _vm.notIn(_vm.extractName(field.name), [
-                                "__sequence",
-                                "__checkbox",
-                                "__component",
-                                "__slot"
-                              ])
-                                ? _c("th", {
-                                    class: [
-                                      "vuetable-th-" + field.name,
-                                      field.titleClass || ""
-                                    ],
-                                    style: { width: field.width },
-                                    domProps: {
-                                      innerHTML: _vm._s(_vm.renderTitle(field))
-                                    }
-                                  })
-                                : _vm._e()
-                            ]
-                          : [
-                              _c("th", {
-                                class: [
-                                  "vuetable-th-" + field.name,
-                                  field.titleClass,
-                                  { sortable: _vm.isSortable(field) }
-                                ],
-                                style: { width: field.width },
-                                attrs: { id: "_" + field.name },
-                                domProps: {
-                                  innerHTML: _vm._s(_vm.renderTitle(field))
-                                },
-                                on: {
-                                  click: function($event) {
-                                    _vm.orderBy(field, $event)
-                                  }
-                                }
-                              })
-                            ]
-                      ]
-                    : _vm._e()
-                ]
-              })
-            ],
-            2
-          )
-        ]),
-        _vm._v(" "),
-        _c(
-          "tbody",
-          { staticClass: "vuetable-body" },
-          [
-            _vm._l(_vm.tableData, function(item, index) {
-              return [
-                _c(
-                  "tr",
-                  {
-                    class: _vm.onRowClass(item, index),
-                    attrs: {
-                      "item-index": index,
-                      render: _vm.onRowChanged(item)
-                    },
-                    on: {
-                      dblclick: function($event) {
-                        _vm.onRowDoubleClicked(item, $event)
-                      },
-                      click: function($event) {
-                        _vm.onRowClicked(item, $event)
-                      }
-                    }
-                  },
-                  [
-                    _vm._l(_vm.tableFields, function(field) {
-                      return [
-                        field.visible
-                          ? [
-                              _vm.isSpecialField(field.name)
-                                ? [
-                                    _vm.extractName(field.name) == "__sequence"
-                                      ? _c("td", {
-                                          class: [
-                                            "vuetable-sequence",
-                                            field.dataClass
-                                          ],
-                                          domProps: {
-                                            innerHTML: _vm._s(
-                                              _vm.renderSequence(index)
-                                            )
-                                          }
-                                        })
-                                      : _vm._e(),
-                                    _vm._v(" "),
-                                    _vm.extractName(field.name) == "__handle"
-                                      ? _c("td", {
-                                          class: [
-                                            "vuetable-handle",
-                                            field.dataClass
-                                          ],
-                                          domProps: {
-                                            innerHTML: _vm._s(
-                                              _vm.renderIconTag([
-                                                "handle-icon",
-                                                _vm.css.handleIcon
-                                              ])
-                                            )
-                                          }
-                                        })
-                                      : _vm._e(),
-                                    _vm._v(" "),
-                                    _vm.extractName(field.name) == "__checkbox"
-                                      ? _c(
-                                          "td",
-                                          {
-                                            class: [
-                                              "vuetable-checkboxes",
-                                              field.dataClass
-                                            ]
-                                          },
-                                          [
-                                            _c("input", {
-                                              attrs: { type: "checkbox" },
-                                              domProps: {
-                                                checked: _vm.rowSelected(
-                                                  item,
-                                                  field.name
-                                                )
-                                              },
-                                              on: {
-                                                change: function($event) {
-                                                  _vm.toggleCheckbox(
-                                                    item,
-                                                    field.name,
-                                                    $event
-                                                  )
-                                                }
-                                              }
-                                            })
-                                          ]
-                                        )
-                                      : _vm._e(),
-                                    _vm._v(" "),
-                                    _vm.extractName(field.name) ===
-                                    "__component"
-                                      ? _c(
-                                          "td",
-                                          {
-                                            class: [
-                                              "vuetable-component",
-                                              field.dataClass
-                                            ]
-                                          },
-                                          [
-                                            _c(_vm.extractArgs(field.name), {
-                                              tag: "component",
-                                              attrs: {
-                                                "row-data": item,
-                                                "row-index": index,
-                                                "row-field": field.sortField
-                                              }
-                                            })
-                                          ],
-                                          1
-                                        )
-                                      : _vm._e(),
-                                    _vm._v(" "),
-                                    _vm.extractName(field.name) === "__slot"
-                                      ? _c(
-                                          "td",
-                                          {
-                                            class: [
-                                              "vuetable-slot",
-                                              field.dataClass
-                                            ]
-                                          },
-                                          [
-                                            _vm._t(
-                                              _vm.extractArgs(field.name),
-                                              null,
-                                              {
-                                                rowData: item,
-                                                rowIndex: index,
-                                                rowField: field.sortField
-                                              }
-                                            )
-                                          ],
-                                          2
-                                        )
-                                      : _vm._e()
-                                  ]
-                                : [
-                                    _vm.hasCallback(field)
-                                      ? _c("td", {
-                                          class: field.dataClass,
-                                          domProps: {
-                                            innerHTML: _vm._s(
-                                              _vm.callCallback(field, item)
-                                            )
-                                          },
-                                          on: {
-                                            click: function($event) {
-                                              _vm.onCellClicked(
-                                                item,
-                                                field,
-                                                $event
-                                              )
-                                            },
-                                            dblclick: function($event) {
-                                              _vm.onCellDoubleClicked(
-                                                item,
-                                                field,
-                                                $event
-                                              )
-                                            }
-                                          }
-                                        })
-                                      : _c("td", {
-                                          class: field.dataClass,
-                                          domProps: {
-                                            innerHTML: _vm._s(
-                                              _vm.getObjectValue(
-                                                item,
-                                                field.name,
-                                                ""
-                                              )
-                                            )
-                                          },
-                                          on: {
-                                            click: function($event) {
-                                              _vm.onCellClicked(
-                                                item,
-                                                field,
-                                                $event
-                                              )
-                                            },
-                                            dblclick: function($event) {
-                                              _vm.onCellDoubleClicked(
-                                                item,
-                                                field,
-                                                $event
-                                              )
-                                            }
-                                          }
-                                        })
-                                  ]
-                            ]
-                          : _vm._e()
-                      ]
-                    })
-                  ],
-                  2
-                ),
-                _vm._v(" "),
-                _vm.useDetailRow
-                  ? [
-                      _vm.isVisibleDetailRow(item[_vm.trackBy])
-                        ? _c(
-                            "tr",
-                            {
-                              class: [_vm.css.detailRowClass],
-                              on: {
-                                click: function($event) {
-                                  _vm.onDetailRowClick(item, $event)
-                                }
-                              }
-                            },
-                            [
-                              _c(
-                                "transition",
-                                { attrs: { name: _vm.detailRowTransition } },
-                                [
-                                  _c(
-                                    "td",
-                                    {
-                                      attrs: { colspan: _vm.countVisibleFields }
-                                    },
-                                    [
-                                      _c(_vm.detailRowComponent, {
-                                        tag: "component",
-                                        attrs: {
-                                          "row-data": item,
-                                          "row-index": index
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        : _vm._e()
-                    ]
-                  : _vm._e()
-              ]
-            }),
-            _vm._v(" "),
-            _vm.displayEmptyDataRow
-              ? [
-                  _c("tr", [
-                    _c("td", {
-                      staticClass: "vuetable-empty-result",
-                      attrs: { colspan: _vm.countVisibleFields },
-                      domProps: { innerHTML: _vm._s(_vm.noDataTemplate) }
-                    })
-                  ])
-                ]
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.lessThanMinRows
-              ? _vm._l(_vm.blankRows, function(i) {
-                  return _c(
-                    "tr",
-                    { staticClass: "blank-row" },
-                    [
-                      _vm._l(_vm.tableFields, function(field) {
-                        return [
-                          field.visible ? _c("td", [_vm._v(" ")]) : _vm._e()
-                        ]
-                      })
-                    ],
-                    2
-                  )
-                })
-              : _vm._e()
-          ],
-          2
-        )
-      ])
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-0e633b8a", module.exports)
-  }
-}
-
-/***/ }),
-
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-10054b1d\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/Panel.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -37288,141 +35732,6 @@ if (false) {
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-2e19e426\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/User/UserDetail.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", { on: { click: _vm.onClick } }, [
-    _c("div", { staticClass: "inline field" }, [
-      _c("label", [_vm._v("Name: ")]),
-      _vm._v(" "),
-      _c("span", [_vm._v(_vm._s(_vm.rowData.name))])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "inline field" }, [
-      _c("label", [_vm._v("Email: ")]),
-      _vm._v(" "),
-      _c("span", [_vm._v(_vm._s(_vm.rowData.email))])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "inline field" }, [
-      _c("label", [_vm._v("Nickname: ")]),
-      _vm._v(" "),
-      _c("span", [_vm._v(_vm._s(_vm.rowData.nickname))])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "inline field" }, [
-      _c("label", [_vm._v("Birthdate: ")]),
-      _vm._v(" "),
-      _c("span", [_vm._v(_vm._s(_vm.rowData.birthdate))])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "inline field" }, [
-      _c("label", [_vm._v("Gender: ")]),
-      _vm._v(" "),
-      _c("span", [_vm._v(_vm._s(_vm.rowData.gender))])
-    ])
-  ])
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-2e19e426", module.exports)
-  }
-}
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4b8060ea\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/User/UserAction.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "custom-actions" }, [
-    _c(
-      "button",
-      {
-        staticClass: "btn btn-sm",
-        on: {
-          click: function($event) {
-            _vm.itemAction("view-item", _vm.rowData, _vm.rowIndex)
-          }
-        }
-      },
-      [_c("i", { staticClass: "icon-zoomin3" })]
-    ),
-    _vm._v(" "),
-    _c(
-      "button",
-      {
-        staticClass: "btn btn-sm",
-        on: {
-          click: function($event) {
-            _vm.itemAction("edit-item", _vm.rowData, _vm.rowIndex)
-          }
-        }
-      },
-      [_c("i", { staticClass: "icon-pencil5" })]
-    ),
-    _vm._v(" "),
-    _c(
-      "button",
-      {
-        staticClass: "btn btn-sm",
-        on: {
-          click: function($event) {
-            _vm.itemAction("delete-item", _vm.rowData, _vm.rowIndex)
-          }
-        }
-      },
-      [_c("i", { staticClass: "icon-trash" })]
-    )
-  ])
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-4b8060ea", module.exports)
-  }
-}
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-66534483\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./node_modules/vuetable-2/src/components/VuetablePaginationInfo.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", {
-    class: ["vuetable-pagination-info", _vm.css.infoClass],
-    domProps: { innerHTML: _vm._s(_vm.paginationInfo) }
-  })
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-66534483", module.exports)
-  }
-}
-
-/***/ }),
-
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-93a3fbee\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/User/UserTable.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -37433,43 +35742,13 @@ var render = function() {
   return _c(
     "div",
     [
-      _c("user-filter-bar"),
-      _vm._v(" "),
-      _c("vuetable", {
-        ref: "vuetable",
+      _c("server-datasource", {
         attrs: {
-          "api-url": "/api/users",
-          fields: _vm.fields,
-          "pagination-path": "",
-          css: _vm.css.table,
-          "sort-order": _vm.sortOrder,
-          "multi-sort": true,
-          "detail-row-component": "",
-          "append-params": _vm.moreParams
-        },
-        on: {
-          "vuetable:cell-clicked": _vm.onCellClicked,
-          "vuetable:pagination-data": _vm.onPaginationData
+          source: "/api/users",
+          columns: _vm.columns,
+          actions: _vm.actions
         }
-      }),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "vuetable-pagination" },
-        [
-          _c("vuetable-pagination-info", {
-            ref: "paginationInfo",
-            attrs: { "info-class": "pagination-info" }
-          }),
-          _vm._v(" "),
-          _c("vuetable-pagination", {
-            ref: "pagination",
-            attrs: { css: _vm.css.pagination },
-            on: { "vuetable-pagination:change-page": _vm.onChangePage }
-          })
-        ],
-        1
-      )
+      })
     ],
     1
   )
@@ -37486,183 +35765,23 @@ if (false) {
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-9ef7cd96\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./node_modules/vuetable-2/src/components/VuetablePagination.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    {
-      directives: [
-        {
-          name: "show",
-          rawName: "v-show",
-          value: _vm.tablePagination && _vm.tablePagination.last_page > 1,
-          expression: "tablePagination && tablePagination.last_page > 1"
-        }
-      ],
-      class: _vm.css.wrapperClass
-    },
-    [
-      _c(
-        "a",
-        {
-          class: [
-            "btn-nav",
-            _vm.css.linkClass,
-            _vm.isOnFirstPage ? _vm.css.disabledClass : ""
-          ],
-          on: {
-            click: function($event) {
-              _vm.loadPage(1)
-            }
-          }
-        },
-        [
-          _vm.css.icons.first != ""
-            ? _c("i", { class: [_vm.css.icons.first] })
-            : _c("span", [_vm._v("«")])
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "a",
-        {
-          class: [
-            "btn-nav",
-            _vm.css.linkClass,
-            _vm.isOnFirstPage ? _vm.css.disabledClass : ""
-          ],
-          on: {
-            click: function($event) {
-              _vm.loadPage("prev")
-            }
-          }
-        },
-        [
-          _vm.css.icons.next != ""
-            ? _c("i", { class: [_vm.css.icons.prev] })
-            : _c("span", [_vm._v(" ‹")])
-        ]
-      ),
-      _vm._v(" "),
-      _vm.notEnoughPages
-        ? [
-            _vm._l(_vm.totalPage, function(n) {
-              return [
-                _c("a", {
-                  class: [
-                    _vm.css.pageClass,
-                    _vm.isCurrentPage(n) ? _vm.css.activeClass : ""
-                  ],
-                  domProps: { innerHTML: _vm._s(n) },
-                  on: {
-                    click: function($event) {
-                      _vm.loadPage(n)
-                    }
-                  }
-                })
-              ]
-            })
-          ]
-        : [
-            _vm._l(_vm.windowSize, function(n) {
-              return [
-                _c("a", {
-                  class: [
-                    _vm.css.pageClass,
-                    _vm.isCurrentPage(_vm.windowStart + n - 1)
-                      ? _vm.css.activeClass
-                      : ""
-                  ],
-                  domProps: { innerHTML: _vm._s(_vm.windowStart + n - 1) },
-                  on: {
-                    click: function($event) {
-                      _vm.loadPage(_vm.windowStart + n - 1)
-                    }
-                  }
-                })
-              ]
-            })
-          ],
-      _vm._v(" "),
-      _c(
-        "a",
-        {
-          class: [
-            "btn-nav",
-            _vm.css.linkClass,
-            _vm.isOnLastPage ? _vm.css.disabledClass : ""
-          ],
-          on: {
-            click: function($event) {
-              _vm.loadPage("next")
-            }
-          }
-        },
-        [
-          _vm.css.icons.next != ""
-            ? _c("i", { class: [_vm.css.icons.next] })
-            : _c("span", [_vm._v("› ")])
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "a",
-        {
-          class: [
-            "btn-nav",
-            _vm.css.linkClass,
-            _vm.isOnLastPage ? _vm.css.disabledClass : ""
-          ],
-          on: {
-            click: function($event) {
-              _vm.loadPage(_vm.totalPage)
-            }
-          }
-        },
-        [
-          _vm.css.icons.last != ""
-            ? _c("i", { class: [_vm.css.icons.last] })
-            : _c("span", [_vm._v("»")])
-        ]
-      )
-    ],
-    2
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-9ef7cd96", module.exports)
-  }
-}
-
-/***/ }),
-
-/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0e633b8a\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./node_modules/vuetable-2/src/components/Vuetable.vue":
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3232d9e8\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./node_modules/vue-datasource/src/components/Pagination.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0e633b8a\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./node_modules/vuetable-2/src/components/Vuetable.vue");
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3232d9e8\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./node_modules/vue-datasource/src/components/Pagination.vue");
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("60d95616", content, false);
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("33a59282", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../css-loader/index.js!../../../vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0e633b8a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../vue-loader/lib/selector.js?type=styles&index=0&bustCache!./Vuetable.vue", function() {
-     var newContent = require("!!../../../css-loader/index.js!../../../vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0e633b8a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../vue-loader/lib/selector.js?type=styles&index=0&bustCache!./Vuetable.vue");
+   module.hot.accept("!!../../../css-loader/index.js!../../../vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3232d9e8\",\"scoped\":true,\"hasInlineConfig\":true}!../../../vue-loader/lib/selector.js?type=styles&index=0&bustCache!./Pagination.vue", function() {
+     var newContent = require("!!../../../css-loader/index.js!../../../vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3232d9e8\",\"scoped\":true,\"hasInlineConfig\":true}!../../../vue-loader/lib/selector.js?type=styles&index=0&bustCache!./Pagination.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -37673,23 +35792,23 @@ if(false) {
 
 /***/ }),
 
-/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4b8060ea\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/components/User/UserAction.vue":
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7706864c\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./node_modules/vue-datasource/src/components/ServerDatasource.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4b8060ea\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/components/User/UserAction.vue");
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7706864c\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/sass-loader/lib/loader.js!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./node_modules/vue-datasource/src/components/ServerDatasource.vue");
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("66a853ca", content, false);
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("53a37699", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4b8060ea\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./UserAction.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4b8060ea\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./UserAction.vue");
+   module.hot.accept("!!../../../css-loader/index.js!../../../vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7706864c\",\"scoped\":true,\"hasInlineConfig\":true}!../../../sass-loader/lib/loader.js!../../../vue-loader/lib/selector.js?type=styles&index=0&bustCache!./ServerDatasource.vue", function() {
+     var newContent = require("!!../../../css-loader/index.js!../../../vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7706864c\",\"scoped\":true,\"hasInlineConfig\":true}!../../../sass-loader/lib/loader.js!../../../vue-loader/lib/selector.js?type=styles&index=0&bustCache!./ServerDatasource.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -48691,1792 +46810,6 @@ module.exports = Vue$3;
 
 /***/ }),
 
-/***/ "./node_modules/vuetable-2/node_modules/axios/index.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/axios.js");
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/node_modules/axios/lib/adapters/xhr.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/utils.js");
-var settle = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/core/settle.js");
-var buildURL = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/helpers/buildURL.js");
-var parseHeaders = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/helpers/parseHeaders.js");
-var isURLSameOrigin = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/helpers/isURLSameOrigin.js");
-var createError = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/core/createError.js");
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/helpers/btoa.js");
-
-module.exports = function xhrAdapter(config) {
-  return new Promise(function dispatchXhrRequest(resolve, reject) {
-    var requestData = config.data;
-    var requestHeaders = config.headers;
-
-    if (utils.isFormData(requestData)) {
-      delete requestHeaders['Content-Type']; // Let the browser set it
-    }
-
-    var request = new XMLHttpRequest();
-    var loadEvent = 'onreadystatechange';
-    var xDomain = false;
-
-    // For IE 8/9 CORS support
-    // Only supports POST and GET calls and doesn't returns the response headers.
-    // DON'T do this for testing b/c XMLHttpRequest is mocked, not XDomainRequest.
-    if ("development" !== 'test' &&
-        typeof window !== 'undefined' &&
-        window.XDomainRequest && !('withCredentials' in request) &&
-        !isURLSameOrigin(config.url)) {
-      request = new window.XDomainRequest();
-      loadEvent = 'onload';
-      xDomain = true;
-      request.onprogress = function handleProgress() {};
-      request.ontimeout = function handleTimeout() {};
-    }
-
-    // HTTP basic authentication
-    if (config.auth) {
-      var username = config.auth.username || '';
-      var password = config.auth.password || '';
-      requestHeaders.Authorization = 'Basic ' + btoa(username + ':' + password);
-    }
-
-    request.open(config.method.toUpperCase(), buildURL(config.url, config.params, config.paramsSerializer), true);
-
-    // Set the request timeout in MS
-    request.timeout = config.timeout;
-
-    // Listen for ready state
-    request[loadEvent] = function handleLoad() {
-      if (!request || (request.readyState !== 4 && !xDomain)) {
-        return;
-      }
-
-      // The request errored out and we didn't get a response, this will be
-      // handled by onerror instead
-      // With one exception: request that using file: protocol, most browsers
-      // will return status as 0 even though it's a successful request
-      if (request.status === 0 && !(request.responseURL && request.responseURL.indexOf('file:') === 0)) {
-        return;
-      }
-
-      // Prepare the response
-      var responseHeaders = 'getAllResponseHeaders' in request ? parseHeaders(request.getAllResponseHeaders()) : null;
-      var responseData = !config.responseType || config.responseType === 'text' ? request.responseText : request.response;
-      var response = {
-        data: responseData,
-        // IE sends 1223 instead of 204 (https://github.com/mzabriskie/axios/issues/201)
-        status: request.status === 1223 ? 204 : request.status,
-        statusText: request.status === 1223 ? 'No Content' : request.statusText,
-        headers: responseHeaders,
-        config: config,
-        request: request
-      };
-
-      settle(resolve, reject, response);
-
-      // Clean up request
-      request = null;
-    };
-
-    // Handle low level network errors
-    request.onerror = function handleError() {
-      // Real errors are hidden from us by the browser
-      // onerror should only fire if it's a network error
-      reject(createError('Network Error', config));
-
-      // Clean up request
-      request = null;
-    };
-
-    // Handle timeout
-    request.ontimeout = function handleTimeout() {
-      reject(createError('timeout of ' + config.timeout + 'ms exceeded', config, 'ECONNABORTED'));
-
-      // Clean up request
-      request = null;
-    };
-
-    // Add xsrf header
-    // This is only done if running in a standard browser environment.
-    // Specifically not if we're in a web worker, or react-native.
-    if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/helpers/cookies.js");
-
-      // Add xsrf header
-      var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
-          cookies.read(config.xsrfCookieName) :
-          undefined;
-
-      if (xsrfValue) {
-        requestHeaders[config.xsrfHeaderName] = xsrfValue;
-      }
-    }
-
-    // Add headers to the request
-    if ('setRequestHeader' in request) {
-      utils.forEach(requestHeaders, function setRequestHeader(val, key) {
-        if (typeof requestData === 'undefined' && key.toLowerCase() === 'content-type') {
-          // Remove Content-Type if data is undefined
-          delete requestHeaders[key];
-        } else {
-          // Otherwise add header to the request
-          request.setRequestHeader(key, val);
-        }
-      });
-    }
-
-    // Add withCredentials to request if needed
-    if (config.withCredentials) {
-      request.withCredentials = true;
-    }
-
-    // Add responseType to request if needed
-    if (config.responseType) {
-      try {
-        request.responseType = config.responseType;
-      } catch (e) {
-        if (request.responseType !== 'json') {
-          throw e;
-        }
-      }
-    }
-
-    // Handle progress if needed
-    if (typeof config.onDownloadProgress === 'function') {
-      request.addEventListener('progress', config.onDownloadProgress);
-    }
-
-    // Not all browsers support upload events
-    if (typeof config.onUploadProgress === 'function' && request.upload) {
-      request.upload.addEventListener('progress', config.onUploadProgress);
-    }
-
-    if (config.cancelToken) {
-      // Handle cancellation
-      config.cancelToken.promise.then(function onCanceled(cancel) {
-        if (!request) {
-          return;
-        }
-
-        request.abort();
-        reject(cancel);
-        // Clean up request
-        request = null;
-      });
-    }
-
-    if (requestData === undefined) {
-      requestData = null;
-    }
-
-    // Send the request
-    request.send(requestData);
-  });
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/node_modules/axios/lib/axios.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/utils.js");
-var bind = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/helpers/bind.js");
-var Axios = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/core/Axios.js");
-var defaults = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/defaults.js");
-
-/**
- * Create an instance of Axios
- *
- * @param {Object} defaultConfig The default config for the instance
- * @return {Axios} A new instance of Axios
- */
-function createInstance(defaultConfig) {
-  var context = new Axios(defaultConfig);
-  var instance = bind(Axios.prototype.request, context);
-
-  // Copy axios.prototype to instance
-  utils.extend(instance, Axios.prototype, context);
-
-  // Copy context to instance
-  utils.extend(instance, context);
-
-  return instance;
-}
-
-// Create the default instance to be exported
-var axios = createInstance(defaults);
-
-// Expose Axios class to allow class inheritance
-axios.Axios = Axios;
-
-// Factory for creating new instances
-axios.create = function create(instanceConfig) {
-  return createInstance(utils.merge(defaults, instanceConfig));
-};
-
-// Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/cancel/Cancel.js");
-axios.CancelToken = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/cancel/CancelToken.js");
-axios.isCancel = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/cancel/isCancel.js");
-
-// Expose all/spread
-axios.all = function all(promises) {
-  return Promise.all(promises);
-};
-axios.spread = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/helpers/spread.js");
-
-module.exports = axios;
-
-// Allow use of default import syntax in TypeScript
-module.exports.default = axios;
-
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/node_modules/axios/lib/cancel/Cancel.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * A `Cancel` is an object that is thrown when an operation is canceled.
- *
- * @class
- * @param {string=} message The message.
- */
-function Cancel(message) {
-  this.message = message;
-}
-
-Cancel.prototype.toString = function toString() {
-  return 'Cancel' + (this.message ? ': ' + this.message : '');
-};
-
-Cancel.prototype.__CANCEL__ = true;
-
-module.exports = Cancel;
-
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/node_modules/axios/lib/cancel/CancelToken.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var Cancel = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/cancel/Cancel.js");
-
-/**
- * A `CancelToken` is an object that can be used to request cancellation of an operation.
- *
- * @class
- * @param {Function} executor The executor function.
- */
-function CancelToken(executor) {
-  if (typeof executor !== 'function') {
-    throw new TypeError('executor must be a function.');
-  }
-
-  var resolvePromise;
-  this.promise = new Promise(function promiseExecutor(resolve) {
-    resolvePromise = resolve;
-  });
-
-  var token = this;
-  executor(function cancel(message) {
-    if (token.reason) {
-      // Cancellation has already been requested
-      return;
-    }
-
-    token.reason = new Cancel(message);
-    resolvePromise(token.reason);
-  });
-}
-
-/**
- * Throws a `Cancel` if cancellation has been requested.
- */
-CancelToken.prototype.throwIfRequested = function throwIfRequested() {
-  if (this.reason) {
-    throw this.reason;
-  }
-};
-
-/**
- * Returns an object that contains a new `CancelToken` and a function that, when called,
- * cancels the `CancelToken`.
- */
-CancelToken.source = function source() {
-  var cancel;
-  var token = new CancelToken(function executor(c) {
-    cancel = c;
-  });
-  return {
-    token: token,
-    cancel: cancel
-  };
-};
-
-module.exports = CancelToken;
-
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/node_modules/axios/lib/cancel/isCancel.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = function isCancel(value) {
-  return !!(value && value.__CANCEL__);
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/node_modules/axios/lib/core/Axios.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var defaults = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/defaults.js");
-var utils = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/utils.js");
-var InterceptorManager = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/core/InterceptorManager.js");
-var dispatchRequest = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/core/dispatchRequest.js");
-var isAbsoluteURL = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/helpers/isAbsoluteURL.js");
-var combineURLs = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/helpers/combineURLs.js");
-
-/**
- * Create a new instance of Axios
- *
- * @param {Object} instanceConfig The default config for the instance
- */
-function Axios(instanceConfig) {
-  this.defaults = instanceConfig;
-  this.interceptors = {
-    request: new InterceptorManager(),
-    response: new InterceptorManager()
-  };
-}
-
-/**
- * Dispatch a request
- *
- * @param {Object} config The config specific for this request (merged with this.defaults)
- */
-Axios.prototype.request = function request(config) {
-  /*eslint no-param-reassign:0*/
-  // Allow for axios('example/url'[, config]) a la fetch API
-  if (typeof config === 'string') {
-    config = utils.merge({
-      url: arguments[0]
-    }, arguments[1]);
-  }
-
-  config = utils.merge(defaults, this.defaults, { method: 'get' }, config);
-
-  // Support baseURL config
-  if (config.baseURL && !isAbsoluteURL(config.url)) {
-    config.url = combineURLs(config.baseURL, config.url);
-  }
-
-  // Hook up interceptors middleware
-  var chain = [dispatchRequest, undefined];
-  var promise = Promise.resolve(config);
-
-  this.interceptors.request.forEach(function unshiftRequestInterceptors(interceptor) {
-    chain.unshift(interceptor.fulfilled, interceptor.rejected);
-  });
-
-  this.interceptors.response.forEach(function pushResponseInterceptors(interceptor) {
-    chain.push(interceptor.fulfilled, interceptor.rejected);
-  });
-
-  while (chain.length) {
-    promise = promise.then(chain.shift(), chain.shift());
-  }
-
-  return promise;
-};
-
-// Provide aliases for supported request methods
-utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
-  /*eslint func-names:0*/
-  Axios.prototype[method] = function(url, config) {
-    return this.request(utils.merge(config || {}, {
-      method: method,
-      url: url
-    }));
-  };
-});
-
-utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
-  /*eslint func-names:0*/
-  Axios.prototype[method] = function(url, data, config) {
-    return this.request(utils.merge(config || {}, {
-      method: method,
-      url: url,
-      data: data
-    }));
-  };
-});
-
-module.exports = Axios;
-
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/node_modules/axios/lib/core/InterceptorManager.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/utils.js");
-
-function InterceptorManager() {
-  this.handlers = [];
-}
-
-/**
- * Add a new interceptor to the stack
- *
- * @param {Function} fulfilled The function to handle `then` for a `Promise`
- * @param {Function} rejected The function to handle `reject` for a `Promise`
- *
- * @return {Number} An ID used to remove interceptor later
- */
-InterceptorManager.prototype.use = function use(fulfilled, rejected) {
-  this.handlers.push({
-    fulfilled: fulfilled,
-    rejected: rejected
-  });
-  return this.handlers.length - 1;
-};
-
-/**
- * Remove an interceptor from the stack
- *
- * @param {Number} id The ID that was returned by `use`
- */
-InterceptorManager.prototype.eject = function eject(id) {
-  if (this.handlers[id]) {
-    this.handlers[id] = null;
-  }
-};
-
-/**
- * Iterate over all the registered interceptors
- *
- * This method is particularly useful for skipping over any
- * interceptors that may have become `null` calling `eject`.
- *
- * @param {Function} fn The function to call for each interceptor
- */
-InterceptorManager.prototype.forEach = function forEach(fn) {
-  utils.forEach(this.handlers, function forEachHandler(h) {
-    if (h !== null) {
-      fn(h);
-    }
-  });
-};
-
-module.exports = InterceptorManager;
-
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/node_modules/axios/lib/core/createError.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var enhanceError = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/core/enhanceError.js");
-
-/**
- * Create an Error with the specified message, config, error code, and response.
- *
- * @param {string} message The error message.
- * @param {Object} config The config.
- * @param {string} [code] The error code (for example, 'ECONNABORTED').
- @ @param {Object} [response] The response.
- * @returns {Error} The created error.
- */
-module.exports = function createError(message, config, code, response) {
-  var error = new Error(message);
-  return enhanceError(error, config, code, response);
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/node_modules/axios/lib/core/dispatchRequest.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/utils.js");
-var transformData = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/core/transformData.js");
-var isCancel = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/cancel/isCancel.js");
-var defaults = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/defaults.js");
-
-/**
- * Throws a `Cancel` if cancellation has been requested.
- */
-function throwIfCancellationRequested(config) {
-  if (config.cancelToken) {
-    config.cancelToken.throwIfRequested();
-  }
-}
-
-/**
- * Dispatch a request to the server using the configured adapter.
- *
- * @param {object} config The config that is to be used for the request
- * @returns {Promise} The Promise to be fulfilled
- */
-module.exports = function dispatchRequest(config) {
-  throwIfCancellationRequested(config);
-
-  // Ensure headers exist
-  config.headers = config.headers || {};
-
-  // Transform request data
-  config.data = transformData(
-    config.data,
-    config.headers,
-    config.transformRequest
-  );
-
-  // Flatten headers
-  config.headers = utils.merge(
-    config.headers.common || {},
-    config.headers[config.method] || {},
-    config.headers || {}
-  );
-
-  utils.forEach(
-    ['delete', 'get', 'head', 'post', 'put', 'patch', 'common'],
-    function cleanHeaderConfig(method) {
-      delete config.headers[method];
-    }
-  );
-
-  var adapter = config.adapter || defaults.adapter;
-
-  return adapter(config).then(function onAdapterResolution(response) {
-    throwIfCancellationRequested(config);
-
-    // Transform response data
-    response.data = transformData(
-      response.data,
-      response.headers,
-      config.transformResponse
-    );
-
-    return response;
-  }, function onAdapterRejection(reason) {
-    if (!isCancel(reason)) {
-      throwIfCancellationRequested(config);
-
-      // Transform response data
-      if (reason && reason.response) {
-        reason.response.data = transformData(
-          reason.response.data,
-          reason.response.headers,
-          config.transformResponse
-        );
-      }
-    }
-
-    return Promise.reject(reason);
-  });
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/node_modules/axios/lib/core/enhanceError.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Update an Error with the specified config, error code, and response.
- *
- * @param {Error} error The error to update.
- * @param {Object} config The config.
- * @param {string} [code] The error code (for example, 'ECONNABORTED').
- @ @param {Object} [response] The response.
- * @returns {Error} The error.
- */
-module.exports = function enhanceError(error, config, code, response) {
-  error.config = config;
-  if (code) {
-    error.code = code;
-  }
-  error.response = response;
-  return error;
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/node_modules/axios/lib/core/settle.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var createError = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/core/createError.js");
-
-/**
- * Resolve or reject a Promise based on response status.
- *
- * @param {Function} resolve A function that resolves the promise.
- * @param {Function} reject A function that rejects the promise.
- * @param {object} response The response.
- */
-module.exports = function settle(resolve, reject, response) {
-  var validateStatus = response.config.validateStatus;
-  // Note: status is not exposed by XDomainRequest
-  if (!response.status || !validateStatus || validateStatus(response.status)) {
-    resolve(response);
-  } else {
-    reject(createError(
-      'Request failed with status code ' + response.status,
-      response.config,
-      null,
-      response
-    ));
-  }
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/node_modules/axios/lib/core/transformData.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/utils.js");
-
-/**
- * Transform the data for a request or a response
- *
- * @param {Object|String} data The data to be transformed
- * @param {Array} headers The headers for the request or response
- * @param {Array|Function} fns A single function or Array of functions
- * @returns {*} The resulting transformed data
- */
-module.exports = function transformData(data, headers, fns) {
-  /*eslint no-param-reassign:0*/
-  utils.forEach(fns, function transform(fn) {
-    data = fn(data, headers);
-  });
-
-  return data;
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/node_modules/axios/lib/defaults.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
-
-var utils = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/utils.js");
-var normalizeHeaderName = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/helpers/normalizeHeaderName.js");
-
-var PROTECTION_PREFIX = /^\)\]\}',?\n/;
-var DEFAULT_CONTENT_TYPE = {
-  'Content-Type': 'application/x-www-form-urlencoded'
-};
-
-function setContentTypeIfUnset(headers, value) {
-  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
-    headers['Content-Type'] = value;
-  }
-}
-
-function getDefaultAdapter() {
-  var adapter;
-  if (typeof XMLHttpRequest !== 'undefined') {
-    // For browsers use XHR adapter
-    adapter = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/adapters/xhr.js");
-  } else if (typeof process !== 'undefined') {
-    // For node use HTTP adapter
-    adapter = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/adapters/xhr.js");
-  }
-  return adapter;
-}
-
-var defaults = {
-  adapter: getDefaultAdapter(),
-
-  transformRequest: [function transformRequest(data, headers) {
-    normalizeHeaderName(headers, 'Content-Type');
-    if (utils.isFormData(data) ||
-      utils.isArrayBuffer(data) ||
-      utils.isStream(data) ||
-      utils.isFile(data) ||
-      utils.isBlob(data)
-    ) {
-      return data;
-    }
-    if (utils.isArrayBufferView(data)) {
-      return data.buffer;
-    }
-    if (utils.isURLSearchParams(data)) {
-      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
-      return data.toString();
-    }
-    if (utils.isObject(data)) {
-      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
-      return JSON.stringify(data);
-    }
-    return data;
-  }],
-
-  transformResponse: [function transformResponse(data) {
-    /*eslint no-param-reassign:0*/
-    if (typeof data === 'string') {
-      data = data.replace(PROTECTION_PREFIX, '');
-      try {
-        data = JSON.parse(data);
-      } catch (e) { /* Ignore */ }
-    }
-    return data;
-  }],
-
-  timeout: 0,
-
-  xsrfCookieName: 'XSRF-TOKEN',
-  xsrfHeaderName: 'X-XSRF-TOKEN',
-
-  maxContentLength: -1,
-
-  validateStatus: function validateStatus(status) {
-    return status >= 200 && status < 300;
-  }
-};
-
-defaults.headers = {
-  common: {
-    'Accept': 'application/json, text/plain, */*'
-  }
-};
-
-utils.forEach(['delete', 'get', 'head'], function forEachMehtodNoData(method) {
-  defaults.headers[method] = {};
-});
-
-utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
-  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
-});
-
-module.exports = defaults;
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/process/browser.js")))
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/node_modules/axios/lib/helpers/bind.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = function bind(fn, thisArg) {
-  return function wrap() {
-    var args = new Array(arguments.length);
-    for (var i = 0; i < args.length; i++) {
-      args[i] = arguments[i];
-    }
-    return fn.apply(thisArg, args);
-  };
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/node_modules/axios/lib/helpers/btoa.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-// btoa polyfill for IE<10 courtesy https://github.com/davidchambers/Base64.js
-
-var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-
-function E() {
-  this.message = 'String contains an invalid character';
-}
-E.prototype = new Error;
-E.prototype.code = 5;
-E.prototype.name = 'InvalidCharacterError';
-
-function btoa(input) {
-  var str = String(input);
-  var output = '';
-  for (
-    // initialize result and counter
-    var block, charCode, idx = 0, map = chars;
-    // if the next str index does not exist:
-    //   change the mapping table to "="
-    //   check if d has no fractional digits
-    str.charAt(idx | 0) || (map = '=', idx % 1);
-    // "8 - idx % 1 * 8" generates the sequence 2, 4, 6, 8
-    output += map.charAt(63 & block >> 8 - idx % 1 * 8)
-  ) {
-    charCode = str.charCodeAt(idx += 3 / 4);
-    if (charCode > 0xFF) {
-      throw new E();
-    }
-    block = block << 8 | charCode;
-  }
-  return output;
-}
-
-module.exports = btoa;
-
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/node_modules/axios/lib/helpers/buildURL.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/utils.js");
-
-function encode(val) {
-  return encodeURIComponent(val).
-    replace(/%40/gi, '@').
-    replace(/%3A/gi, ':').
-    replace(/%24/g, '$').
-    replace(/%2C/gi, ',').
-    replace(/%20/g, '+').
-    replace(/%5B/gi, '[').
-    replace(/%5D/gi, ']');
-}
-
-/**
- * Build a URL by appending params to the end
- *
- * @param {string} url The base of the url (e.g., http://www.google.com)
- * @param {object} [params] The params to be appended
- * @returns {string} The formatted url
- */
-module.exports = function buildURL(url, params, paramsSerializer) {
-  /*eslint no-param-reassign:0*/
-  if (!params) {
-    return url;
-  }
-
-  var serializedParams;
-  if (paramsSerializer) {
-    serializedParams = paramsSerializer(params);
-  } else if (utils.isURLSearchParams(params)) {
-    serializedParams = params.toString();
-  } else {
-    var parts = [];
-
-    utils.forEach(params, function serialize(val, key) {
-      if (val === null || typeof val === 'undefined') {
-        return;
-      }
-
-      if (utils.isArray(val)) {
-        key = key + '[]';
-      }
-
-      if (!utils.isArray(val)) {
-        val = [val];
-      }
-
-      utils.forEach(val, function parseValue(v) {
-        if (utils.isDate(v)) {
-          v = v.toISOString();
-        } else if (utils.isObject(v)) {
-          v = JSON.stringify(v);
-        }
-        parts.push(encode(key) + '=' + encode(v));
-      });
-    });
-
-    serializedParams = parts.join('&');
-  }
-
-  if (serializedParams) {
-    url += (url.indexOf('?') === -1 ? '?' : '&') + serializedParams;
-  }
-
-  return url;
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/node_modules/axios/lib/helpers/combineURLs.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Creates a new URL by combining the specified URLs
- *
- * @param {string} baseURL The base URL
- * @param {string} relativeURL The relative URL
- * @returns {string} The combined URL
- */
-module.exports = function combineURLs(baseURL, relativeURL) {
-  return baseURL.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '');
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/node_modules/axios/lib/helpers/cookies.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/utils.js");
-
-module.exports = (
-  utils.isStandardBrowserEnv() ?
-
-  // Standard browser envs support document.cookie
-  (function standardBrowserEnv() {
-    return {
-      write: function write(name, value, expires, path, domain, secure) {
-        var cookie = [];
-        cookie.push(name + '=' + encodeURIComponent(value));
-
-        if (utils.isNumber(expires)) {
-          cookie.push('expires=' + new Date(expires).toGMTString());
-        }
-
-        if (utils.isString(path)) {
-          cookie.push('path=' + path);
-        }
-
-        if (utils.isString(domain)) {
-          cookie.push('domain=' + domain);
-        }
-
-        if (secure === true) {
-          cookie.push('secure');
-        }
-
-        document.cookie = cookie.join('; ');
-      },
-
-      read: function read(name) {
-        var match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
-        return (match ? decodeURIComponent(match[3]) : null);
-      },
-
-      remove: function remove(name) {
-        this.write(name, '', Date.now() - 86400000);
-      }
-    };
-  })() :
-
-  // Non standard browser env (web workers, react-native) lack needed support.
-  (function nonStandardBrowserEnv() {
-    return {
-      write: function write() {},
-      read: function read() { return null; },
-      remove: function remove() {}
-    };
-  })()
-);
-
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/node_modules/axios/lib/helpers/isAbsoluteURL.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Determines whether the specified URL is absolute
- *
- * @param {string} url The URL to test
- * @returns {boolean} True if the specified URL is absolute, otherwise false
- */
-module.exports = function isAbsoluteURL(url) {
-  // A URL is considered absolute if it begins with "<scheme>://" or "//" (protocol-relative URL).
-  // RFC 3986 defines scheme name as a sequence of characters beginning with a letter and followed
-  // by any combination of letters, digits, plus, period, or hyphen.
-  return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url);
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/node_modules/axios/lib/helpers/isURLSameOrigin.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/utils.js");
-
-module.exports = (
-  utils.isStandardBrowserEnv() ?
-
-  // Standard browser envs have full support of the APIs needed to test
-  // whether the request URL is of the same origin as current location.
-  (function standardBrowserEnv() {
-    var msie = /(msie|trident)/i.test(navigator.userAgent);
-    var urlParsingNode = document.createElement('a');
-    var originURL;
-
-    /**
-    * Parse a URL to discover it's components
-    *
-    * @param {String} url The URL to be parsed
-    * @returns {Object}
-    */
-    function resolveURL(url) {
-      var href = url;
-
-      if (msie) {
-        // IE needs attribute set twice to normalize properties
-        urlParsingNode.setAttribute('href', href);
-        href = urlParsingNode.href;
-      }
-
-      urlParsingNode.setAttribute('href', href);
-
-      // urlParsingNode provides the UrlUtils interface - http://url.spec.whatwg.org/#urlutils
-      return {
-        href: urlParsingNode.href,
-        protocol: urlParsingNode.protocol ? urlParsingNode.protocol.replace(/:$/, '') : '',
-        host: urlParsingNode.host,
-        search: urlParsingNode.search ? urlParsingNode.search.replace(/^\?/, '') : '',
-        hash: urlParsingNode.hash ? urlParsingNode.hash.replace(/^#/, '') : '',
-        hostname: urlParsingNode.hostname,
-        port: urlParsingNode.port,
-        pathname: (urlParsingNode.pathname.charAt(0) === '/') ?
-                  urlParsingNode.pathname :
-                  '/' + urlParsingNode.pathname
-      };
-    }
-
-    originURL = resolveURL(window.location.href);
-
-    /**
-    * Determine if a URL shares the same origin as the current location
-    *
-    * @param {String} requestURL The URL to test
-    * @returns {boolean} True if URL shares the same origin, otherwise false
-    */
-    return function isURLSameOrigin(requestURL) {
-      var parsed = (utils.isString(requestURL)) ? resolveURL(requestURL) : requestURL;
-      return (parsed.protocol === originURL.protocol &&
-            parsed.host === originURL.host);
-    };
-  })() :
-
-  // Non standard browser envs (web workers, react-native) lack needed support.
-  (function nonStandardBrowserEnv() {
-    return function isURLSameOrigin() {
-      return true;
-    };
-  })()
-);
-
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/node_modules/axios/lib/helpers/normalizeHeaderName.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/utils.js");
-
-module.exports = function normalizeHeaderName(headers, normalizedName) {
-  utils.forEach(headers, function processHeader(value, name) {
-    if (name !== normalizedName && name.toUpperCase() === normalizedName.toUpperCase()) {
-      headers[normalizedName] = value;
-      delete headers[name];
-    }
-  });
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/node_modules/axios/lib/helpers/parseHeaders.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var utils = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/utils.js");
-
-/**
- * Parse headers into an object
- *
- * ```
- * Date: Wed, 27 Aug 2014 08:58:49 GMT
- * Content-Type: application/json
- * Connection: keep-alive
- * Transfer-Encoding: chunked
- * ```
- *
- * @param {String} headers Headers needing to be parsed
- * @returns {Object} Headers parsed into an object
- */
-module.exports = function parseHeaders(headers) {
-  var parsed = {};
-  var key;
-  var val;
-  var i;
-
-  if (!headers) { return parsed; }
-
-  utils.forEach(headers.split('\n'), function parser(line) {
-    i = line.indexOf(':');
-    key = utils.trim(line.substr(0, i)).toLowerCase();
-    val = utils.trim(line.substr(i + 1));
-
-    if (key) {
-      parsed[key] = parsed[key] ? parsed[key] + ', ' + val : val;
-    }
-  });
-
-  return parsed;
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/node_modules/axios/lib/helpers/spread.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Syntactic sugar for invoking a function and expanding an array for arguments.
- *
- * Common use case would be to use `Function.prototype.apply`.
- *
- *  ```js
- *  function f(x, y, z) {}
- *  var args = [1, 2, 3];
- *  f.apply(null, args);
- *  ```
- *
- * With `spread` this example can be re-written.
- *
- *  ```js
- *  spread(function(x, y, z) {})([1, 2, 3]);
- *  ```
- *
- * @param {Function} callback
- * @returns {Function}
- */
-module.exports = function spread(callback) {
-  return function wrap(arr) {
-    return callback.apply(null, arr);
-  };
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/node_modules/axios/lib/utils.js":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var bind = __webpack_require__("./node_modules/vuetable-2/node_modules/axios/lib/helpers/bind.js");
-
-/*global toString:true*/
-
-// utils is a library of generic helper functions non-specific to axios
-
-var toString = Object.prototype.toString;
-
-/**
- * Determine if a value is an Array
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if value is an Array, otherwise false
- */
-function isArray(val) {
-  return toString.call(val) === '[object Array]';
-}
-
-/**
- * Determine if a value is an ArrayBuffer
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if value is an ArrayBuffer, otherwise false
- */
-function isArrayBuffer(val) {
-  return toString.call(val) === '[object ArrayBuffer]';
-}
-
-/**
- * Determine if a value is a FormData
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if value is an FormData, otherwise false
- */
-function isFormData(val) {
-  return (typeof FormData !== 'undefined') && (val instanceof FormData);
-}
-
-/**
- * Determine if a value is a view on an ArrayBuffer
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if value is a view on an ArrayBuffer, otherwise false
- */
-function isArrayBufferView(val) {
-  var result;
-  if ((typeof ArrayBuffer !== 'undefined') && (ArrayBuffer.isView)) {
-    result = ArrayBuffer.isView(val);
-  } else {
-    result = (val) && (val.buffer) && (val.buffer instanceof ArrayBuffer);
-  }
-  return result;
-}
-
-/**
- * Determine if a value is a String
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if value is a String, otherwise false
- */
-function isString(val) {
-  return typeof val === 'string';
-}
-
-/**
- * Determine if a value is a Number
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if value is a Number, otherwise false
- */
-function isNumber(val) {
-  return typeof val === 'number';
-}
-
-/**
- * Determine if a value is undefined
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if the value is undefined, otherwise false
- */
-function isUndefined(val) {
-  return typeof val === 'undefined';
-}
-
-/**
- * Determine if a value is an Object
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if value is an Object, otherwise false
- */
-function isObject(val) {
-  return val !== null && typeof val === 'object';
-}
-
-/**
- * Determine if a value is a Date
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if value is a Date, otherwise false
- */
-function isDate(val) {
-  return toString.call(val) === '[object Date]';
-}
-
-/**
- * Determine if a value is a File
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if value is a File, otherwise false
- */
-function isFile(val) {
-  return toString.call(val) === '[object File]';
-}
-
-/**
- * Determine if a value is a Blob
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if value is a Blob, otherwise false
- */
-function isBlob(val) {
-  return toString.call(val) === '[object Blob]';
-}
-
-/**
- * Determine if a value is a Function
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if value is a Function, otherwise false
- */
-function isFunction(val) {
-  return toString.call(val) === '[object Function]';
-}
-
-/**
- * Determine if a value is a Stream
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if value is a Stream, otherwise false
- */
-function isStream(val) {
-  return isObject(val) && isFunction(val.pipe);
-}
-
-/**
- * Determine if a value is a URLSearchParams object
- *
- * @param {Object} val The value to test
- * @returns {boolean} True if value is a URLSearchParams object, otherwise false
- */
-function isURLSearchParams(val) {
-  return typeof URLSearchParams !== 'undefined' && val instanceof URLSearchParams;
-}
-
-/**
- * Trim excess whitespace off the beginning and end of a string
- *
- * @param {String} str The String to trim
- * @returns {String} The String freed of excess whitespace
- */
-function trim(str) {
-  return str.replace(/^\s*/, '').replace(/\s*$/, '');
-}
-
-/**
- * Determine if we're running in a standard browser environment
- *
- * This allows axios to run in a web worker, and react-native.
- * Both environments support XMLHttpRequest, but not fully standard globals.
- *
- * web workers:
- *  typeof window -> undefined
- *  typeof document -> undefined
- *
- * react-native:
- *  typeof document.createElement -> undefined
- */
-function isStandardBrowserEnv() {
-  return (
-    typeof window !== 'undefined' &&
-    typeof document !== 'undefined' &&
-    typeof document.createElement === 'function'
-  );
-}
-
-/**
- * Iterate over an Array or an Object invoking a function for each item.
- *
- * If `obj` is an Array callback will be called passing
- * the value, index, and complete array for each item.
- *
- * If 'obj' is an Object callback will be called passing
- * the value, key, and complete object for each property.
- *
- * @param {Object|Array} obj The object to iterate
- * @param {Function} fn The callback to invoke for each item
- */
-function forEach(obj, fn) {
-  // Don't bother if no value provided
-  if (obj === null || typeof obj === 'undefined') {
-    return;
-  }
-
-  // Force an array if not already something iterable
-  if (typeof obj !== 'object' && !isArray(obj)) {
-    /*eslint no-param-reassign:0*/
-    obj = [obj];
-  }
-
-  if (isArray(obj)) {
-    // Iterate over array values
-    for (var i = 0, l = obj.length; i < l; i++) {
-      fn.call(null, obj[i], i, obj);
-    }
-  } else {
-    // Iterate over object keys
-    for (var key in obj) {
-      if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        fn.call(null, obj[key], key, obj);
-      }
-    }
-  }
-}
-
-/**
- * Accepts varargs expecting each argument to be an object, then
- * immutably merges the properties of each object and returns result.
- *
- * When multiple objects contain the same key the later object in
- * the arguments list will take precedence.
- *
- * Example:
- *
- * ```js
- * var result = merge({foo: 123}, {foo: 456});
- * console.log(result.foo); // outputs 456
- * ```
- *
- * @param {Object} obj1 Object to merge
- * @returns {Object} Result of all merge properties
- */
-function merge(/* obj1, obj2, obj3, ... */) {
-  var result = {};
-  function assignValue(val, key) {
-    if (typeof result[key] === 'object' && typeof val === 'object') {
-      result[key] = merge(result[key], val);
-    } else {
-      result[key] = val;
-    }
-  }
-
-  for (var i = 0, l = arguments.length; i < l; i++) {
-    forEach(arguments[i], assignValue);
-  }
-  return result;
-}
-
-/**
- * Extends object a by mutably adding to it the properties of object b.
- *
- * @param {Object} a The object to be extended
- * @param {Object} b The object to copy properties from
- * @param {Object} thisArg The object to bind function to
- * @return {Object} The resulting value of object a
- */
-function extend(a, b, thisArg) {
-  forEach(b, function assignValue(val, key) {
-    if (thisArg && typeof val === 'function') {
-      a[key] = bind(val, thisArg);
-    } else {
-      a[key] = val;
-    }
-  });
-  return a;
-}
-
-module.exports = {
-  isArray: isArray,
-  isArrayBuffer: isArrayBuffer,
-  isFormData: isFormData,
-  isArrayBufferView: isArrayBufferView,
-  isString: isString,
-  isNumber: isNumber,
-  isObject: isObject,
-  isUndefined: isUndefined,
-  isDate: isDate,
-  isFile: isFile,
-  isBlob: isBlob,
-  isFunction: isFunction,
-  isStream: isStream,
-  isURLSearchParams: isURLSearchParams,
-  isStandardBrowserEnv: isStandardBrowserEnv,
-  forEach: forEach,
-  merge: merge,
-  extend: extend,
-  trim: trim
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/src/components/Vuetable.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-0e633b8a\",\"scoped\":true,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./node_modules/vuetable-2/src/components/Vuetable.vue")
-}
-var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
-/* script */
-var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./node_modules/vuetable-2/src/components/Vuetable.vue")
-/* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-0e633b8a\",\"hasScoped\":true,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./node_modules/vuetable-2/src/components/Vuetable.vue")
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = "data-v-0e633b8a"
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "node_modules\\vuetable-2\\src\\components\\Vuetable.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-0e633b8a", Component.options)
-  } else {
-    hotAPI.reload("data-v-0e633b8a", Component.options)
-' + '  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/src/components/VuetablePagination.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
-/* script */
-var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./node_modules/vuetable-2/src/components/VuetablePagination.vue")
-/* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-9ef7cd96\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./node_modules/vuetable-2/src/components/VuetablePagination.vue")
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "node_modules\\vuetable-2\\src\\components\\VuetablePagination.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-9ef7cd96", Component.options)
-  } else {
-    hotAPI.reload("data-v-9ef7cd96", Component.options)
-' + '  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/src/components/VuetablePaginationInfo.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
-/* script */
-var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./node_modules/vuetable-2/src/components/VuetablePaginationInfo.vue")
-/* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-66534483\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./node_modules/vuetable-2/src/components/VuetablePaginationInfo.vue")
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "node_modules\\vuetable-2\\src\\components\\VuetablePaginationInfo.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-66534483", Component.options)
-  } else {
-    hotAPI.reload("data-v-66534483", Component.options)
-' + '  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/src/components/VuetablePaginationInfoMixin.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
-/* script */
-var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./node_modules/vuetable-2/src/components/VuetablePaginationInfoMixin.vue")
-/* template */
-var __vue_template__ = null
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "node_modules\\vuetable-2\\src\\components\\VuetablePaginationInfoMixin.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-4fb1c124", Component.options)
-  } else {
-    hotAPI.reload("data-v-4fb1c124", Component.options)
-' + '  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-
-/***/ "./node_modules/vuetable-2/src/components/VuetablePaginationMixin.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
-/* script */
-var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./node_modules/vuetable-2/src/components/VuetablePaginationMixin.vue")
-/* template */
-var __vue_template__ = null
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "node_modules\\vuetable-2\\src\\components\\VuetablePaginationMixin.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-5f1969fc", Component.options)
-  } else {
-    hotAPI.reload("data-v-5f1969fc", Component.options)
-' + '  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-
 /***/ "./node_modules/webpack/buildin/global.js":
 /***/ (function(module, exports) {
 
@@ -50672,108 +47005,6 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-10054b1d", Component.options)
   } else {
     hotAPI.reload("data-v-10054b1d", Component.options)
-' + '  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-
-/***/ "./resources/assets/js/components/User/UserAction.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4b8060ea\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./resources/assets/js/components/User/UserAction.vue")
-}
-var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
-/* script */
-var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/User/UserAction.vue")
-/* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-4b8060ea\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/User/UserAction.vue")
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources\\assets\\js\\components\\User\\UserAction.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-4b8060ea", Component.options)
-  } else {
-    hotAPI.reload("data-v-4b8060ea", Component.options)
-' + '  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-
-/***/ "./resources/assets/js/components/User/UserDetail.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
-/* script */
-var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\"]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0&bustCache!./resources/assets/js/components/User/UserDetail.vue")
-/* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-2e19e426\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0&bustCache!./resources/assets/js/components/User/UserDetail.vue")
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources\\assets\\js\\components\\User\\UserDetail.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-2e19e426", Component.options)
-  } else {
-    hotAPI.reload("data-v-2e19e426", Component.options)
 ' + '  }
   module.hot.dispose(function (data) {
     disposed = true
