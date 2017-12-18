@@ -13,9 +13,18 @@ try {
     require('bootstrap-sass');
 } catch (e) {}
 
-window.ripple = require('ripple-js');
+require('ripple-js');
+require('jquery.nicescroll');
+require('vuetable-2');
 
-window.nicescroll = require('jquery.nicescroll');
+//require('./actions/users');
+
+/**
+ *
+ * Other lib imports
+ *
+ */
+
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

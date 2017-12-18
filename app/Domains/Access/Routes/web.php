@@ -15,6 +15,9 @@ $this->post('password/email', 'ForgotPasswordController@sendResetLinkEmail')->na
 $this->get('password/reset/{token}', 'ResetPasswordController@showResetForm')->name('password.reset');
 $this->post('password/reset', 'ResetPasswordController@reset');
 
-$this->group(['prefix' => 'users'], function (){
-    $this->get('/','UserController@index')->name('users.home');
+$this->group(['prefix' => 'access'], function (){
+    $this->group(['prefix' => 'users'], function (){
+        $this->get('/data','UserController@data');
+        $this->get('/','UserController@index')->name('users.home');
+    });
 });
