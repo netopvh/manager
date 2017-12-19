@@ -5,15 +5,13 @@
 @stop
 
 @section('content')
-    <div class="row">
-        <div class="col-md-8">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <span class="text-bold">Usuários</span>
-                </div>
-                <user-table></user-table>
-            </div>
-        </div>
-    </div>
+    <app-pagina width="6">
+        <app-panel title="Usuários">
+            <app-table-list
+                    v-bind:columns="['#','Titulo','Descricao']"
+                    v-bind:items="[[1,'PHP OO','Curso de PHP OO'],[2,'Vue JS','Curso de Vue Js']]"
+            ></app-table-list>
+        </app-panel>
+    </app-pagina>
 
 @stop

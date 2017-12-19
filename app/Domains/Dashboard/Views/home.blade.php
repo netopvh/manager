@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-    <app-panel title="Página Inicial">
-        Conteudo Principal
-    </app-panel>
+    <app-pagina width="11">
+        <app-panel title="Teste">
+
+        </app-panel>
+    </app-pagina>
 @endsection

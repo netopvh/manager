@@ -17,7 +17,10 @@ window.Vue = require('vue');
  */
 
 Vue.component('app-panel', require('./components/Panel.vue'));
+Vue.component('app-pagina', require('./components/Pagina.vue'));
+Vue.component('app-table-list', require('./components/TableList.vue'));
 Vue.component('user-table',require('./components/User/UserTable.vue'));
+
 
 
 const app = new Vue({
