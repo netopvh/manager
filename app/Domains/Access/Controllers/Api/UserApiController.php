@@ -5,18 +5,10 @@ namespace App\Domains\Access\Controllers\Api;
 use App\Domains\Access\Models\User;
 use Illuminate\Http\Request;
 use App\Core\Http\Controllers\Controller;
-use Yajra\DataTables\DataTables;
 
 class UserApiController extends Controller
 {
 
-    protected $dataTables;
-
-    public function __construct(DataTables $dataTables)
-    {
-        //$this->middleware('auth');
-        $this->dataTables = $dataTables;
-    }
     /**
      * Display a listing of the resource.
      *
@@ -24,12 +16,7 @@ class UserApiController extends Controller
      */
     public function index()
     {
-        return $this->dataTables->eloquent(User::query())
-            ->addColumn('action', function (){
-                return '<a href="">Edit</a>';
-            })
-            ->rawColumns(['action'])
-            ->make(true);
+        return response()->json(User::all());
     }
 
     /**

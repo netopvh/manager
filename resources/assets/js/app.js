@@ -17,8 +17,11 @@ window.Vue = require('vue');
  */
 
 Vue.component('app-panel', require('./components/Panel.vue'));
-Vue.component('app-pagina', require('./components/Pagina.vue'));
+Vue.component('app-pagina', require('./components/Page.vue'));
 Vue.component('app-table-list', require('./components/TableList.vue'));
+Vue.component('app-modal', require('./components/modal/Modal.vue'));
+Vue.component('app-modal-link', require('./components/modal/ModalLink.vue'));
+Vue.component('app-form', require('./components/Form.vue'));
 Vue.component('user-table',require('./components/User/UserTable.vue'));
 
 
