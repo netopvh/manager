@@ -20,4 +20,16 @@ class UserController extends Controller
         return view('users.index', compact('users'));
     }
 
+    public function store(Request $request)
+    {
+        User::create($request->all());
+
+        return redirect()->back();
+    }
+
+    public function show($id)
+    {
+        return User::find($id);
+    }
+
 }

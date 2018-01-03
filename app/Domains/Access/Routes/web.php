@@ -17,7 +17,8 @@ $this->post('password/reset', 'ResetPasswordController@reset');
 
 $this->group(['prefix' => 'access'], function (){
     $this->group(['prefix' => 'users'], function (){
-        $this->get('/data','UserController@data');
         $this->get('/','UserController@index')->name('users.home');
+        $this->post('/store','UserController@store')->name('users.store');
+        $this->get('/{id}','UserController@show');
     });
 });

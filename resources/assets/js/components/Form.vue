@@ -1,5 +1,5 @@
 <template>
-    <form v-bind:class="css" v-bind:action="action" v-bind:method="defineMethod" v-bind:enctype="enctype">
+    <form v-bind:class="css" v-bind:action="action" v-bind:method="defineMethod" v-bind:enctype="enctype" autocomplete="off">
         <input v-if="alteraMethod" type="hidden" name="_method" v-bind:value="alteraMethod">
         <input v-if="token" type="hidden" name="_token" v-bind:value="token">
         <slot></slot>

@@ -13,7 +13,7 @@
     <link href="{{ mix('css/colors.css') }}" rel="stylesheet" type="text/css">
 </head>
 <body class="navbar-top">
-<div id="app">
+<div id="app" style="display: none">
 
     @include('layouts.partials.navbar')
 
