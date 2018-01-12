@@ -11,8 +11,8 @@
                     v-bind:columns="['#','Nome','Email']"
                     v-bind:items="{{$users}}"
                     create="#create"
-                    view="/"
-                    edit="#edit"
+                    view="/access/users/"
+                    edit="/access/users/"
                     remove="#delete"
                     token="15454545"
                     sort="desc"
@@ -41,11 +41,10 @@
         </span>
     </app-modal>
     <app-modal name="edit" title="Editar">
-        <app-form id="formEdit" css="" action="#" method="put" enctype="" token="1251515454">
+        <app-form id="formEdit" css="" action="{{ route('users.store',[]) }}" method="put" enctype="" token="1251515454">
             <div class="form-group">
                 <label for="exampleInputEmail1">Nome</label>
                 <input type="text" class="form-control" placeholder="Nome" v-model="$store.state.item.name">
-
             </div>
             <div class="form-group">
                 <label for="exampleInputPassword1">Email</label>

@@ -20,5 +20,6 @@ $this->group(['prefix' => 'access'], function (){
         $this->get('/','UserController@index')->name('users.home');
         $this->post('/store','UserController@store')->name('users.store');
         $this->get('/{id}','UserController@show');
+        $this->patch('/{id}','UserController@update');
     });
 });

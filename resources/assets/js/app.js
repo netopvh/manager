@@ -32,7 +32,6 @@ const app = new Vue({
     el: '#app',
     store,
     mounted: function(){
-        console.log("OK");
         document.getElementById('app').style.display = "block";
     }
 });

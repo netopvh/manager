@@ -24,10 +24,12 @@
 
 <script>
     export default {
-        props: ['type', 'name', 'title', 'css', 'icon', 'item'],
+        props: ['type', 'name', 'title', 'css', 'icon', 'item','url'],
         methods:{
             preencheForm: function(){
-                this.$store.commit('setItem',this.item)
+                axios.get(this.url + this.item.id).then(res => {
+                    this.$store.commit('setItem',res.data)
+                });
             }
         }
     }

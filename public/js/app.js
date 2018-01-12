@@ -2891,10 +2891,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['type', 'name', 'title', 'css', 'icon', 'item'],
+    props: ['type', 'name', 'title', 'css', 'icon', 'item', 'url'],
     methods: {
         preencheForm: function preencheForm() {
-            this.$store.commit('setItem', this.item);
+            var _this = this;
+
+            axios.get(this.url + this.item.id).then(function (res) {
+                _this.$store.commit('setItem', res.data);
+            });
         }
     }
 });
@@ -36505,6 +36509,7 @@ var render = function() {
                               ? _c("app-modal-link", {
                                   attrs: {
                                     item: item,
+                                    url: _vm.view,
                                     css: "btn-sm btn-info",
                                     type: "link",
                                     name: "view",
@@ -36572,6 +36577,7 @@ var render = function() {
                               ? _c("app-modal-link", {
                                   attrs: {
                                     item: item,
+                                    url: _vm.view,
                                     type: "link",
                                     css: "btn-sm btn-info",
                                     name: "view",
@@ -36624,6 +36630,7 @@ var render = function() {
                               ? _c("app-modal-link", {
                                   attrs: {
                                     item: item,
+                                    url: _vm.view,
                                     css: "btn-sm btn-info",
                                     type: "link",
                                     name: "view",
@@ -47762,7 +47769,6 @@ var app = new Vue({
   el: '#app',
   store: __WEBPACK_IMPORTED_MODULE_0__vuex_store__["a" /* default */],
   mounted: function mounted() {
-    console.log("OK");
     document.getElementById('app').style.display = "block";
   }
 });

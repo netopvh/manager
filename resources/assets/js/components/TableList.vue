@@ -24,7 +24,7 @@
                         <input type="hidden" name="_token" v-bind:value="token">
 
                         <a v-if="view && !modal" v-bind:href="view" class="btn-sm btn-info"><i class="icon-eye"></i></a>
-                        <app-modal-link v-if="view && modal" v-bind:item="item" css="btn-sm btn-info" type="link" name="view" icon="icon-eye"></app-modal-link>
+                        <app-modal-link v-if="view && modal" v-bind:item="item" v-bind:url="view" css="btn-sm btn-info" type="link" name="view" icon="icon-eye"></app-modal-link>
 
                         <a v-if="edit && !modal" v-bind:href="edit" class="btn-sm btn-primary"><i class="icon-pencil"></i></a>
                         <app-modal-link v-if="edit && modal" v-bind:item="item" type="link" name="edit" icon="icon-database-edit2"></app-modal-link>
@@ -33,14 +33,14 @@
                     </form>
                     <span v-if="!token">
                         <a v-if="view && !modal" v-bind:href="view" class="btn-sm btn-info"><i class="icon-eye"></i></a>
-                        <app-modal-link v-if="view && modal" v-bind:item="item" type="link" css="btn-sm btn-info" name="view" icon="icon-eye"></app-modal-link>
+                        <app-modal-link v-if="view && modal" v-bind:item="item" v-bind:url="view" type="link" css="btn-sm btn-info" name="view" icon="icon-eye"></app-modal-link>
 
                         <a v-if="edit && !modal" v-bind:href="edit" class="btn-sm btn-primary"><i class="icon-pencil"></i></a>
                         <app-modal-link v-if="edit && modal" type="link" name="edit" icon="icon-database-edit2"></app-modal-link>
                     </span>
                     <span v-if="token && !remove">
                         <a v-if="view && !modal" v-bind:href="view" class="btn-sm btn-info"><i class="icon-eye"></i></a>
-                        <app-modal-link v-if="view && modal" v-bind:item="item" css="btn-sm btn-info" type="link" name="view" icon="icon-eye"></app-modal-link>
+                        <app-modal-link v-if="view && modal" v-bind:item="item" v-bind:url="view" css="btn-sm btn-info" type="link" name="view" icon="icon-eye"></app-modal-link>
 
                         <a v-if="edit && !modal" v-bind:href="edit" class="btn-sm btn-primary"><i class="icon-pencil"></i></a>
                         <app-modal-link v-if="edit && modal" type="link" name="edit" icon="icon-database-edit2"></app-modal-link>
