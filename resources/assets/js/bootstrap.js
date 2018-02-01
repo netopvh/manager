@@ -15,7 +15,6 @@ try {
 
 require('ripple-js');
 require('jquery.nicescroll');
-require('vuetable-2');
 
 //require('./actions/users');
 
