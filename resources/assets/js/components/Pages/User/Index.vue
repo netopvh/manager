@@ -2,7 +2,6 @@
     <app-panel title="Usuários">
         <div>
             <vue-good-table
-                    title="Demo Table"
                     :columns="columns"
                     :rows="rows"
                     :paginate="true"
@@ -12,12 +11,12 @@
                     <td>{{ props.row.name }}</td>
                     <td class="fancy">{{ props.row.age }}</td>
                     <td>{{ props.formattedRow.createdAt }}</td>
-                    <td>{{ props.index }}</td>
+                    <td>{{ props.formattedRow.score }}</td>
                 </template>
                 <template slot="table-row-after" slot-scope="props">
-                    <td>
-                        <button @click="doSomething(props.index)">show</button>
-                        <button @click="doSomething(props.index)">show</button>
+                    <td width="150">
+                        <button class="btn btn-primary btn-xs" @click="doSomething(props.index)"><i class="icon-eye4"></i></button>
+                        <button class="btn btn-info btn-xs" @click="doSomething(props.index)"><i class="icon-pencil5"></i></button>
                     </td>
                 </template>
             </vue-good-table>
@@ -36,31 +35,31 @@
             return {
                 columns: [
                     {
-                        label: 'Name',
+                        label: 'Nome',
                         field: 'name',
-                        filterable: true,
+                        filterable: false,
                     },
                     {
-                        label: 'Age',
+                        label: 'Idade',
                         field: 'age',
                         type: 'number',
                         html: false,
                     },
                     {
-                        label: 'Created On',
+                        label: 'Cadastrado em',
                         field: 'createdAt',
                         type: 'date',
-                        inputFormat: 'YYYYMMDD',
+                        inputFormat: 'YYYY-MM-DD',
                         outputFormat: 'DD/MM/YYYY',
                     },
                     {
-                        label: 'Percent',
+                        label: 'Porcentagem',
                         field: 'score',
                         type: 'percentage',
                         html: false,
                     },
                     {
-                        label: 'Action',
+                        label: 'Ações',
                         html:true,
                         filterable: false,
                         sortable:false,
@@ -68,7 +67,7 @@
 
                 ],
                 rows: [
-                    {id:1, name:"John",age:20,createdAt: '201-10-31',score: 0.03343},
+                    {id:1, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
                     {id:2, name:"Jane",age:24,createdAt: '2011-10-31',score: 0.03343},
                     {id:3, name:"Susan",age:16,createdAt: '2011-10-30',score: 0.03343},
                     {id:4, name:"Chris",age:55,createdAt: '2011-10-11',score: 0.03343},
