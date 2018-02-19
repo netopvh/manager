@@ -1,100 +1,58 @@
 <template>
-    <app-panel title="Usuários">
-        <div>
-            <vue-good-table
-                    :columns="columns"
-                    :rows="rows"
-                    :paginate="true"
-                    :lineNumbers="true"
-                    styleClass="table condensed table-bordered table-striped">
-                <template slot="table-row" slot-scope="props">
-                    <td>{{ props.row.name }}</td>
-                    <td class="fancy">{{ props.row.age }}</td>
-                    <td>{{ props.formattedRow.createdAt }}</td>
-                    <td>{{ props.formattedRow.score }}</td>
-                </template>
-                <template slot="table-row-after" slot-scope="props">
-                    <td width="150">
-                        <button class="btn btn-primary btn-xs" @click="doSomething(props.index)"><i class="icon-eye4"></i></button>
-                        <button class="btn btn-info btn-xs" @click="doSomething(props.index)"><i class="icon-pencil5"></i></button>
-                    </td>
-                </template>
-            </vue-good-table>
-        </div>
+    <app-panel title="Usuarios">
+        
     </app-panel>
 </template>
 
 <script>
-    import Vue from 'vue'
-    import VueGoodTable from 'vue-good-table'
 
-    Vue.use(VueGoodTable);
+    import { ServerDatasource } from 'vue-datasource'
 
     export default {
-        data(){
+        components: {
+            ServerDatasource
+        },
+        data() {
             return {
+                items: [
+                    {
+                        name: 'Angelo Neto'
+                    },
+                    {
+                        name: 'Fabio Santos'
+                    },
+                    {
+                        name: 'Jorge Azevedo'
+                    },
+                ],
+                total: 100,
                 columns: [
                     {
-                        label: 'Nome',
-                        field: 'name',
-                        filterable: false,
-                    },
+                        name: 'Nome',
+                        key: 'name',
+                        order: false
+                    }
+                ],
+                actions: [
                     {
-                        label: 'Idade',
-                        field: 'age',
-                        type: 'number',
-                        html: false,
-                    },
-                    {
-                        label: 'Cadastrado em',
-                        field: 'createdAt',
-                        type: 'date',
-                        inputFormat: 'YYYY-MM-DD',
-                        outputFormat: 'DD/MM/YYYY',
-                    },
-                    {
-                        label: 'Porcentagem',
-                        field: 'score',
-                        type: 'percentage',
-                        html: false,
-                    },
-                    {
-                        label: 'Ações',
-                        html:true,
-                        filterable: false,
-                        sortable:false,
-                    },
+                        text: 'Click me', // Button label
+                        icon: 'glyphicon glyphicon-check', // Button icon
+                        class: 'btn-primary', // Button class (background color)
+                        show(selectedRow) { // Event to define a condition to display the button with the selected row
+                            return true
+                        },
+                        event(e, row) { // Event handler callback. Gets event instace and selected row
+                            console.log('Click row: ', row); // If no row is selected, row will be NULL
+                        }
+                    }
+                ]
+            }
 
-                ],
-                rows: [
-                    {id:1, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
-                    {id:2, name:"Jane",age:24,createdAt: '2011-10-31',score: 0.03343},
-                    {id:3, name:"Susan",age:16,createdAt: '2011-10-30',score: 0.03343},
-                    {id:4, name:"Chris",age:55,createdAt: '2011-10-11',score: 0.03343},
-                    {id:5, name:"Dan",age:40,createdAt: '2011-10-21',score: 0.03343},
-                    {id:6, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
-                    {id:7, name:"Jane",age:24,createdAt: '2011-10-31'},
-                    {id:8, name:"Susan",age:16,createdAt: '2013-10-31',score: 0.03343},
-                    {id:9, name:"Chris",age:55,createdAt: '2012-10-31',score: 0.03343},
-                    {id:10, name:"Dan",age:40,createdAt: '2011-10-31',score: 0.03343},
-                    {id:11, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
-                    {id:12, name:"Jane",age:24,createdAt: '2011-07-31',score: 0.03343},
-                    {id:13, name:"Susan",age:16,createdAt: '2017-02-28',score: 0.03343},
-                    {id:14, name:"Chris",age:55,createdAt: '',score: 0.03343},
-                    {id:15, name:"Dan",age:40,createdAt: '2011-10-31',score: 0.03343},
-                    {id:19, name:"Chris",age:55,createdAt: '2011-10-31',score: 0.03343},
-                    {id:20, name:"Dan",age:40,createdAt: '2011-10-31',score: 0.03343},
-                ],
-            };
         },
-        methods:{
-            doSomething(item){
-                alert(item);
+        computed: {
+            totalItems: function () {
+                return this.items.length;
             }
         }
     }
 </script>
-
-<style scoped>
-
-</style>
