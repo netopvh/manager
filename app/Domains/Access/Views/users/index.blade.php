@@ -6,5 +6,4 @@
 
 @section('content')
     <user-table></user-table>
-
 @stop

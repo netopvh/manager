@@ -1,25 +1,34 @@
 <template>
-    <div class="custom-actions">
-        <button class="ui basic button" @click="itemAction('view-item', rowData, rowIndex)"><i class="zoom icon"></i></button>
-        <button class="ui basic button" @click="itemAction('edit-item', rowData, rowIndex)"><i class="edit icon"></i></button>
-        <button class="ui basic button" @click="itemAction('delete-item', rowData, rowIndex)"><i class="delete icon"></i></button>
-    </div>
+    <span>
+        <button class="btn btn-xs btn-primary" @click.stop.prevent="update(rowData,index)"><i class="icon-pencil"></i></button>
+        <button class="btn btn-xs btn-danger" @click.stop.prevent="deleteRow(rowData,index)"><i class="icon-trash"></i></button>
+    </span>
 </template>
 
 <script>
     export default {
+        name: 'user-actions',
         props: {
             rowData: {
-                type: Object,
-                required: true
+                type: Object
             },
-            rowIndex: {
+            field: {
+                type: String
+            },
+            index: {
                 type: Number
             }
         },
         methods: {
-            itemAction (action, data, index) {
-                console.log('custom-actions: ' + action, data.name, index)
+            update(){
+                let params = {type: 'edit', index: this.index, rowData: this.rowData};
+                this.$emit('on-custom-comp', params);
+            },
+
+            deleteRow(){
+                let params = {type: 'delete', index: this.index};
+                this.$emit('on-custom-comp', params);
+
             }
         }
     }
@@ -29,6 +38,7 @@
     .custom-actions button.ui.button {
         padding: 8px 8px;
     }
+
     .custom-actions button.ui.button > i.icon {
         margin: auto !important;
     }

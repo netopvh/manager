@@ -9,7 +9,10 @@ require('./bootstrap');
 
 
 window.Vue = require('vue');
+import Vue from 'vue'
+import Vuetify from 'vuetify'
 import store from './vuex/store'
+import 'vuetify/dist/vuetify.min.css'
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -17,14 +20,16 @@ import store from './vuex/store'
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+Vue.use(Vuetify)
 
+//Base Components
 Vue.component('app-panel', require('./components/Panel.vue'));
-Vue.component('app-pagina', require('./components/Page.vue'));
-Vue.component('app-table-list', require('./components/TableList.vue'));
 Vue.component('app-modal', require('./components/modal/Modal.vue'));
 Vue.component('app-modal-link', require('./components/modal/ModalLink.vue'));
 Vue.component('app-form', require('./components/Form.vue'));
-Vue.component('user-table',require('./components/Pages/User/Index.vue'));
+
+//Page Components
+Vue.component('user-table', require('./components/Pages/User/Index'))
 
 
 
