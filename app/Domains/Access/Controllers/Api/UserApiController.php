@@ -5,6 +5,7 @@ namespace App\Domains\Access\Controllers\Api;
 use App\Domains\Access\Models\User;
 use Illuminate\Http\Request;
 use App\Core\Http\Controllers\Controller;
+use Yajra\DataTables\DataTables;
 
 class UserApiController extends Controller
 {
@@ -14,9 +15,16 @@ class UserApiController extends Controller
      *
      * @return mixed
      */
-    public function index()
+    public function index(DataTables $dataTables)
     {
-        return response()->json(User::all());
+        $model = User::query()->select('id','name','email');
+
+        return $dataTables->eloquent($model)
+            ->addColumn('action', function (){
+                return '<a>Edit</a>';
+            })
+            ->rawColumns(['action'])
+            ->toJson();
     }
 
     /**

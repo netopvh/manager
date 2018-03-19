@@ -14,12 +14,8 @@ try {
     require('bootstrap');
 } catch (e) {}
 
-//require('datatables.net-bs');
 require('ripple-js');
 require('jquery.nicescroll');
-
-//Ações do usuário
-//require('./actions/users');
 
 /**
  *

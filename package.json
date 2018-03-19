@@ -11,14 +11,6 @@
     },
     "devDependencies": {
         "axios": "^0.18",
-        "babel-helper-vue-jsx-merge-props": "^2.0.3",
-        "babel-plugin-syntax-jsx": "^6.18.0",
-        "babel-plugin-syntax-object-rest-spread": "^6.13.0",
-        "babel-plugin-transform-object-rest-spread": "^6.26.0",
-        "babel-plugin-transform-runtime": "^6.23.0",
-        "babel-plugin-transform-vue-jsx": "^3.7.0",
-        "babel-preset-env": "^1.6.1",
-        "babel-preset-stage-2": "^6.24.1",
         "bootstrap": "^4.0.0",
         "cross-env": "^5.1.4",
         "jquery": "2.1.4",
@@ -27,17 +19,15 @@
         "less-loader": "^4.1.0",
         "lodash": "^4.17.5",
         "popper.js": "^1.12",
-        "transform-runtime": "0.0.0",
         "vue": "^2.5.16",
-        "vue-easytable": "^1.7.0",
+        "vue-template-compiler": "^2.5.16",
         "vuex": "^3.0.1"
     },
     "dependencies": {
         "datatables.net-bs": "^1.10.16",
         "jquery.nicescroll": "^3.7.6",
-        "latest-version": "^3.1.0",
-        "material-design-icons-iconfont": "^3.0.3",
         "ripple-js": "^1.4.4",
+        "vstx-data-table": "^0.2.6",
         "vue-events": "^3.1.0",
         "vuetify": "^1.0.8"
     }
