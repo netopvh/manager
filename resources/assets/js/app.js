@@ -26,7 +26,7 @@ Vue.component('app-modal-link', require('./components/modal/ModalLink.vue'));
 Vue.component('app-form', require('./components/Form.vue'));
 
 //Page Components
-Vue.component('user-table', require('./views/users/Index.vue'));
+Vue.component('user-table', require('./components/views/User/Index.vue'));
 
 
 /**
