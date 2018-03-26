@@ -5,5 +5,9 @@
 @stop
 
 @section('content')
-    <user-table></user-table>
+    <app-pagina width="8">
+        <app-panel title="Lista de Usuários">
+
+        </app-panel>
+    </app-pagina>
 @stop

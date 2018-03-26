@@ -12,6 +12,7 @@
     <link href="{{ mix('css/core.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ mix('css/components.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ mix('css/colors.css') }}" rel="stylesheet" type="text/css">
+    @stack('styles')
 </head>
 <body class="navbar-top">
 <div id="app" style="display: none">

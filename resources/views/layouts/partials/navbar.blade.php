@@ -15,13 +15,6 @@
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
-            <li>
-                <a href="#">
-                    <i class="icon-cog3"></i>
-                    <span class="visible-xs-inline-block position-right">Icon link</span>
-                </a>
-            </li>
-
             @guest
             <li><a href="{{ route('login') }}">Login</a></li>
             @else
