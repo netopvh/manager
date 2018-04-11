@@ -9,8 +9,7 @@ require('./bootstrap');
 
 
 window.Vue = require('vue');
-import Vue from 'vue'
-import store from './vuex/store'
+//import {VTable,VPagination} from 'vue-easytable'
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -21,27 +20,20 @@ import store from './vuex/store'
 //Base Components
 Vue.component('app-panel', require('./components/Panel.vue'));
 Vue.component('app-pagina', require('./components/Page.vue'));
-Vue.component('app-modal', require('./components/modal/Modal.vue'));
-Vue.component('app-modal-link', require('./components/modal/ModalLink.vue'));
-Vue.component('app-form', require('./components/Form.vue'));
+//Vue.component('app-modal', require('./components/modal/Modal.vue'));
+//Vue.component('app-modal-link', require('./components/modal/ModalLink.vue'));
+//Vue.component('app-form', require('./components/Form.vue'));
+//Vue.component(VTable.name, VTable);
+//Vue.component(VPagination.name, VPagination);
 
 //Page Components
 Vue.component('user-table', require('./components/views/User/Index.vue'));
 
 
-/**
- *
- * Ações realizadas em Javascript/Jquery
- */
-
-//Ações do Usuário
-//require('./actions/users');
-
 
 
 const app = new Vue({
     el: '#app',
-    store,
     mounted: function(){
         document.getElementById('app').style.display = "block";
     }

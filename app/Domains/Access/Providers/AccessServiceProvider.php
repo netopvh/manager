@@ -3,6 +3,8 @@ namespace App\Domains\Access\Providers;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use App\Domains\Access\Repositories\Contracts\UserRepository;
+use App\Domains\Access\Repositories\UserRepositoryEloquent;
 
 class AccessServiceProvider extends ServiceProvider
 {
@@ -33,7 +35,7 @@ class AccessServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //$this->app->bind(UserRepository::class,UserRepositoryEloquent::class);
+        $this->app->bind(UserRepository::class,UserRepositoryEloquent::class);
     }
 
     /**

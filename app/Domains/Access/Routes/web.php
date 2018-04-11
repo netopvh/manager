@@ -1,25 +1,26 @@
 <?php
 
 // Authentication Routes...
-$this->get('login', 'LoginController@showLoginForm')->name('login');
-$this->post('login', 'LoginController@login');
-$this->post('logout', 'LoginController@logout')->name('logout');
+Route::get('login', 'LoginController@showLoginForm')->name('login');
+Route::post('login', 'LoginController@login');
+Route::post('logout', 'LoginController@logout')->name('logout');
 
 // Registration Routes...
-$this->get('register', 'RegisterController@showRegistrationForm')->name('register');
-$this->post('register', 'RegisterController@register');
+Route::get('register', 'RegisterController@showRegistrationForm')->name('register');
+Route::post('register', 'RegisterController@register');
 
 // Password Reset Routes...
-$this->get('password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.request');
-$this->post('password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.email');
-$this->get('password/reset/{token}', 'ResetPasswordController@showResetForm')->name('password.reset');
-$this->post('password/reset', 'ResetPasswordController@reset');
+Route::get('password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.request');
+Route::post('password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+Route::get('password/reset/{token}', 'ResetPasswordController@showResetForm')->name('password.reset');
+Route::post('password/reset', 'ResetPasswordController@reset');
 
-$this->group(['prefix' => 'access'], function (){
-    $this->group(['prefix' => 'users'], function (){
-        $this->get('/','UserController@index')->name('users.home');
-        $this->post('/store','UserController@store')->name('users.store');
-        $this->get('/{id}','UserController@show');
-        $this->patch('/{id}','UserController@update');
+Route::prefix('access')->group(function (){
+    Route::prefix('users')->group(function (){
+        Route::get('/','UserController@index')->name('users.home');
+        Route::get('/create','UserController@create')->name('users.create');
+        Route::post('/store','UserController@store')->name('users.store');
+        Route::get('/{id}/edit','UserController@edit')->name('users.edit');
+        Route::patch('/{id}','UserController@update')->name('users.restore');
     });
 });

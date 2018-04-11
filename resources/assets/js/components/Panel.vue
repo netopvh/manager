@@ -1,7 +1,7 @@
 <template>
     <div v-bind:class="defineCor">
         <div class="panel-heading"><span class="text-bold">{{ title }}</span></div>
-        <div class="panel-body">
+        <div>
             <slot></slot>
         </div>
     </div>

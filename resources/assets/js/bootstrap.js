@@ -17,6 +17,18 @@ try {
 require('ripple-js');
 require('jquery.nicescroll');
 
+
+/**
+ *
+ * Ações realizadas em Javascript/Jquery
+ */
+
+//Ações do Usuário
+//require('./actions/users');
+
+//import 'vue-easytable/libs/themes-base/index.css'
+import 'materialize-css/dist/css/materialize.css'
+
 /**
  *
  * Other lib imports

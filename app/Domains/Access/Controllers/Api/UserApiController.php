@@ -6,10 +6,17 @@ use App\Domains\Access\Models\User;
 use Illuminate\Http\Request;
 use App\Core\Http\Controllers\Controller;
 use Yajra\DataTables\DataTables;
+use App\Domains\Access\Repositories\Contracts\UserRepository;
 
 class UserApiController extends Controller
 {
+    protected $userRepository;
 
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -17,13 +24,16 @@ class UserApiController extends Controller
      */
     public function index(DataTables $dataTables)
     {
-        $model = User::query()->select('id','name','email');
+        $model = $this->userRepository->select(['id','nome','email','active']);
 
         return $dataTables->eloquent($model)
-            ->addColumn('action', function (){
-                return '<a>Edit</a>';
+            ->addColumn('status', function ($user){
+                return $user->active? '<span class="label label-success">Ativo</span>':'<span class="label label-warning">Inativo</span>';
             })
-            ->rawColumns(['action'])
+            ->addColumn('action', function ($user){
+                return view('users.actions', compact('user'));
+            })
+            ->rawColumns(['action','status'])
             ->toJson();
     }
 
@@ -79,7 +89,13 @@ class UserApiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = $this->userRepository->find($id);
+        $user->active = $request->active;
+        if(!$user->save()){
+            return response()->json([
+                'status' => 'Error'
+            ]);
+        }
     }
 
     /**

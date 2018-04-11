@@ -1,6 +1,6 @@
 <div class="navbar navbar-inverse navbar-fixed-top bg-blue">
     <div class="navbar-header">
-        <a class="navbar-brand" href=""><img src="{{ asset('css/images/logo_light.png') }}" alt=""></a>
+        <a class="navbar-brand" href=""><img src="{{ asset('images/logo_light.png') }}" alt=""></a>
 
         <ul class="nav navbar-nav pull-right visible-xs-block">
             <li><a data-toggle="collapse" data-target="#navbar-mobile"><i class="icon-tree5"></i></a></li>
@@ -20,7 +20,7 @@
             @else
                 <li class="dropdown dropdown-user">
                     <a class="dropdown-toggle" data-toggle="dropdown">
-                        <span>{{ auth()->user()->name }}</span>
+                        <span>{{ auth()->user()->nome }}</span>
                         <i class="caret"></i>
                     </a>
 

@@ -146,12 +146,15 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        LaravelEnso\VueDatatable\AppServiceProvider::class,
 
         /*
          * Package Service Providers...
          */
         Watson\Active\ActiveServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
+        Prettus\Repository\Providers\RepositoryServiceProvider::class,
+        UxWeb\SweetAlert\SweetAlertServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -218,6 +221,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Active' => Watson\Active\Facades\Active::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
+        'Alert' => UxWeb\SweetAlert\SweetAlert::class,
 
     ],
 

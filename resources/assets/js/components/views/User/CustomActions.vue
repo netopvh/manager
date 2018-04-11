@@ -1,13 +1,13 @@
 <template>
-    <span>
-        <button class="btn btn-xs btn-primary" @click.stop.prevent="update(rowData,index)"><i class="icon-pencil"></i></button>
-        <button class="btn btn-xs btn-danger" @click.stop.prevent="deleteRow(rowData,index)"><i class="icon-trash"></i></button>
-    </span>
+   <span>
+        <a href="" @click.stop.prevent="update(rowData,index)">Editar</a>&nbsp;
+        <a href="" @click.stop.prevent="deleteRow(rowData,index)">Deletar</a>
+        </span>
 </template>
 
 <script>
     export default {
-        name: 'user-actions',
+        name: 'user-operation',
         props: {
             rowData: {
                 type: Object

@@ -13,6 +13,7 @@
         "axios": "^0.18",
         "bootstrap": "^4.0.0",
         "cross-env": "^5.1.4",
+        "gulp": "^3.9.1",
         "jquery": "2.1.4",
         "laravel-mix": "^1.7.2",
         "less": "^2.7.3",
@@ -20,15 +21,23 @@
         "lodash": "^4.17.5",
         "popper.js": "^1.12",
         "vue": "^2.5.16",
+        "vue-easytable": "^1.7.0",
         "vue-template-compiler": "^2.5.16",
         "vuex": "^3.0.1"
     },
     "dependencies": {
-        "datatables.net-bs": "^1.10.16",
+        "datatables.net-dt": "^1.10.16",
+        "gulp-clean-css": "^3.9.3",
+        "gulp-concat": "^2.6.1",
+        "gulp-copy": "^1.1.0",
+        "gulp-less": "^4.0.0",
+        "gulp-rename": "^1.2.2",
+        "gulp-uglify": "^3.0.0",
         "jquery.nicescroll": "^3.7.6",
+        "material-design-icons-iconfont": "^3.0.3",
+        "materialize-css": "^0.100.2",
+        "moment": "^2.22.0",
         "ripple-js": "^1.4.4",
-        "vstx-data-table": "^0.2.6",
-        "vue-events": "^3.1.0",
-        "vuetify": "^1.0.8"
+        "vue-materialize-datatable": "^0.7.3"
     }
 }

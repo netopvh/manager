@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'nome','username', 'email', 'password','active'
     ];
 
     /**
@@ -30,5 +30,10 @@ class User extends Authenticatable
     public function getNameAttribute($value)
     {
         return mb_strtoupper($value,'UTF-8');
+    }
+
+    public function setNomeAttribute($value)
+    {
+        $this->attributes['nome'] = mb_strtoupper($value,"UTF-8");
     }
 }
