@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Core\Http\Controllers\Controller;
 use Yajra\DataTables\DataTables;
 use App\Domains\Access\Repositories\Contracts\UserRepository;
+use Illuminate\Support\Str;
 
 class UserApiController extends Controller
 {
@@ -14,6 +15,7 @@ class UserApiController extends Controller
 
     public function __construct(UserRepository $userRepository)
     {
+        $this->middleware('auth:api');
         $this->userRepository = $userRepository;
     }
     
@@ -91,6 +93,9 @@ class UserApiController extends Controller
     {
         $user = $this->userRepository->find($id);
         $user->active = $request->active;
+        if(is_null($user->api_token)){
+            $user->api_token = Str::random(60);
+        }
         if(!$user->save()){
             return response()->json([
                 'status' => 'Error'

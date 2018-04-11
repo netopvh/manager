@@ -5,6 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    @auth
+    <meta name="api_token" content="{{ auth()->user()->api_token }}">
+    @endauth
     <title>{{ config('app.name', 'Laravel') }}</title>
     <link href="{{ asset('css/icomoon.min.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('css/all.min.css') }}" rel="stylesheet" type="text/css">

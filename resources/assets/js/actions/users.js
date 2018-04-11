@@ -1,3 +1,6 @@
+//Default authenticated token
+var token = $('meta[name="api_token"]').attr('content');
+
 $.extend($.fn.dataTable.defaults, {
     autoWidth: false,
     columnDefs: [{
@@ -44,7 +47,7 @@ var usersTable = $('#users').DataTable({
     processing: true,
     serverSide: true,
     responsive: true,
-    ajax: '/api/users',
+    ajax: '/api/users?api_token=' + token,
     columns: [
         {data: 'id', name: 'id', width: '70px'},
         {data: 'nome', name: 'nome'},
@@ -69,7 +72,7 @@ $('table[data-form="tblUsers"]').on('click','.ativa', function (e) {
     e.preventDefault();
     var vm = $(this);
     $.ajax({
-        url:'/api/users/' + vm.data('id'),
+        url:'/api/users/' + vm.data('id') + '?api_token='+ token,
         type: "post",
         data:{
             active: vm.data('value'),
@@ -86,7 +89,7 @@ $('table[data-form="tblUsers"]').on('click','.desativa', function (e) {
     e.preventDefault();
     var vm = $(this);
     $.ajax({
-        url:'/api/users/' + vm.data('id'),
+        url:'/api/users/' + vm.data('id') + '?api_token=' + token,
         type: "post",
         data:{
             active: vm.data('value'),
