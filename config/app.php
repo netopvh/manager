@@ -155,6 +155,7 @@ return [
         Yajra\DataTables\DataTablesServiceProvider::class,
         Prettus\Repository\Providers\RepositoryServiceProvider::class,
         UxWeb\SweetAlert\SweetAlertServiceProvider::class,
+        Laratrust\LaratrustServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -222,6 +223,7 @@ return [
         'Active' => Watson\Active\Facades\Active::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Alert' => UxWeb\SweetAlert\SweetAlert::class,
+        'Laratrust'   => Laratrust\LaratrustFacade::class,
 
     ],
 

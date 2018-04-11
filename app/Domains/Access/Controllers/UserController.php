@@ -80,6 +80,13 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * Atualiza registro no banco de dados
+     *
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(Request $request, $id)
     {
         try{
