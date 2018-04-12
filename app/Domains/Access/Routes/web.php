@@ -23,4 +23,11 @@ Route::prefix('access')->group(function (){
         Route::get('/{id}/edit','UserController@edit')->name('users.edit');
         Route::patch('/{id}','UserController@update')->name('users.restore');
     });
+    Route::prefix('roles')->group(function (){
+        Route::get('/','RoleController@index')->name('roles.home');
+        Route::get('/create','RoleController@create')->name('roles.create');
+        Route::post('/store','RoleController@store')->name('roles.store');
+        Route::get('/{id}/edit','RoleController@edit')->name('roles.edit');
+        Route::patch('/{id}','RoleController@update')->name('roles.restore');
+    });
 });

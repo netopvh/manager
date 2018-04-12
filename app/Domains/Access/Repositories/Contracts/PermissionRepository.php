@@ -2,14 +2,14 @@
 
 namespace App\Domains\Access\Repositories\Contracts;
 
-use App\Core\Repositories\BaseRepositoryContract;
+use Prettus\Repository\Contracts\RepositoryInterface;
 
 /**
- * Interface UserRepository.
+ * Interface PermissionRepository.
  *
  * @package namespace App\Domains\Access\Repositories\Contracts;
  */
-interface UserRepository extends BaseRepositoryContract
+interface PermissionRepository extends RepositoryInterface
 {
     //
 }

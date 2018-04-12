@@ -39,6 +39,13 @@ $.extend($.fn.dataTable.defaults, {
     }
 });
 
+//SETUP CSRF TOKEN
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
 var lastIdx = null;
 var usersTable = $('#users').DataTable({
     dom: "<'row'<'col-xs-12'f<'col-xs-12'>>r>" +
@@ -47,12 +54,19 @@ var usersTable = $('#users').DataTable({
     processing: true,
     serverSide: true,
     responsive: true,
+    columnDefs: [
+        {
+            targets: 5,
+            className: "text-center",
+        }
+    ],
     ajax: '/api/users?api_token=' + token,
     columns: [
-        {data: 'id', name: 'id', width: '70px'},
-        {data: 'nome', name: 'nome'},
-        {data: 'email', name: 'email'},
-        {data: 'status', name: 'status', width: '100px'},
+        {data: 'id', name: 'users.id', width: '70px'},
+        {data: 'nome', name: 'users.nome'},
+        {data: 'email', name: 'users.email'},
+        {data: 'display_name', name: 'roles.display_name'},
+        {data: 'active', name: 'active', width: '100px'},
         {data: 'action', orderable: false, searchable: false, width: '90px'}
     ]
 });
@@ -73,14 +87,11 @@ $('table[data-form="tblUsers"]').on('click','.ativa', function (e) {
     var vm = $(this);
     $.ajax({
         url:'/api/users/' + vm.data('id') + '?api_token='+ token,
-        type: "post",
+        type: "patch",
         data:{
             active: vm.data('value'),
-            _method:"PATCH",
-            _token: $('meta[name="csrf_token"]').attr('content')
         },
         success:function(data){
-            console.log(data);
             usersTable.ajax.reload( null, false );
         }
     });
@@ -90,15 +101,15 @@ $('table[data-form="tblUsers"]').on('click','.desativa', function (e) {
     var vm = $(this);
     $.ajax({
         url:'/api/users/' + vm.data('id') + '?api_token=' + token,
-        type: "post",
+        type: "patch",
         data:{
             active: vm.data('value'),
-            _method:"PATCH",
-            _token: $('meta[name="csrf_token"]').attr('content')
         },
-        success:function(data){
-            console.log(data);
+        success:function(){
             usersTable.ajax.reload( null, false );
+        },
+        errors: function (data) {
+            console.log(data);
         }
     });
 });

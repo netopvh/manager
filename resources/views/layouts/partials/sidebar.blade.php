@@ -57,8 +57,8 @@
                                     <span class="text-bold">Usuários</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="#">
+                            <li class="{{ active(['roles.*']) }}">
+                                <a href="{{ route('roles.home') }}">
                                     <i class="icon-users4"></i>
                                     <span class="text-bold">Perfil de Acesso</span>
                                 </a>

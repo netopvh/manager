@@ -8,6 +8,8 @@ use Prettus\Repository\Criteria\RequestCriteria;
 use App\Domains\Access\Repositories\Contracts\UserRepository;
 use App\Domains\Access\Models\User;
 use App\Domains\Access\Validators\UserValidator;
+use Prettus\Repository\Events\RepositoryEntityCreated;
+use Prettus\Validator\Contracts\ValidatorInterface;
 
 /**
  * Class UserRepositoryEloquent.
@@ -42,13 +44,28 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
         $this->pushCriteria(app(RequestCriteria::class));
     }
 
-    public function findUser($id)
+    public function create(array $attributes)
     {
-        $result = $this->model->newQuery()->where('id', $id)->get()->first();
-        if (is_null($result)) {
-            throw new GeneralException("Não foi localizado nenhum registro no banco de dados");
-        }else{
-            return $result;
+        if (!is_null($this->validator)) {
+            if( $this->versionCompare($this->app->version(), "5.2.*", ">") ){
+                $attributes = $this->model->newInstance()->forceFill($attributes)->makeVisible($this->model->getHidden())->toArray();
+            }else{
+                $model = $this->model->newInstance()->forceFill($attributes);
+                $model->addVisible($this->model->getHidden());
+                $attributes = $model->toArray();
+            }
+
+            $this->validator->with($attributes)->passesOrFail(ValidatorInterface::RULE_CREATE);
+        }
+        $user = parent::create($attributes);
+        if ($user){
+            if(! count($attributes['role_id'])){
+                throw new GeneralException('É necessário atribuir um perfil para o usuário');
+            }
+            $user->attachRole($attributes['role_id']);
+            $this->resetModel();
+            event(new RepositoryEntityCreated($this, $user));
+            return $this->parserResult($user);
         }
     }
     

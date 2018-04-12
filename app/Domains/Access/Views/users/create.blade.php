@@ -22,7 +22,8 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label class="text-bold">Login:</label>
-                                    <input type="text" name="username" value="{{ old('username') }}" class="form-control" required>
+                                    <input type="text" name="username" value="{{ old('username') }}"
+                                           class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -36,21 +37,38 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label class="text-bold">Nome:</label>
-                                    <input type="text" name="nome" class="form-control text-uppercase" value="{{ old('nome') }}" required>
+                                    <input type="text" name="nome" class="form-control text-uppercase"
+                                           value="{{ old('nome') }}" required>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label class="text-bold">Email:</label>
-                                    <input type="email" name="email" class="form-control" value="{{ old('email') }}" required>
+                                    <input type="email" name="email" class="form-control" value="{{ old('email') }}"
+                                           required>
                                 </div>
                             </div>
                         </div>
-
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label class="text-bold">Perfil: </label>
+                                    <select name="role_id" class="select" required>
+                                        <option value=""></option>
+                                        @foreach($roles as $role)
+                                            <option value="{{ $role->id }}">{{ $role->display_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-lg-12">
-                                <button class="btn btn-primary legitRipple"><i class="icon-database-insert"></i> Cadastrar</button>
-                                <a class="btn btn-info legitRipple" href="{{ route('users.home') }}"><i class="icon-reply"></i> Retornar</a>
+                                <button class="btn btn-primary legitRipple"><i class="icon-database-insert"></i>
+                                    Cadastrar
+                                </button>
+                                <a class="btn btn-info legitRipple" href="{{ route('users.home') }}"><i
+                                            class="icon-reply"></i> Retornar</a>
                             </div>
                         </div>
                     </form>

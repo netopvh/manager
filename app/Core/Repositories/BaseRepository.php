@@ -3,6 +3,7 @@
 
 namespace App\Core\Repositories;
 
+use App\Core\Exceptions\GeneralException;
 use Prettus\Repository\Eloquent\BaseRepository as PrettusRepository;
 use Illuminate\Container\Container as Application;
 
@@ -35,6 +36,16 @@ class BaseRepository extends PrettusRepository implements BaseRepositoryContract
     public function select(array $colunms = ['*'])
     {
         return $this->model->newQuery()->select($colunms);
+    }
+
+    public function findExists(string $column, $value)
+    {
+        $result = $this->model->newQuery()->where($column, $value)->get()->first();
+        if (is_null($result)) {
+            throw new GeneralException("Não foi localizado nenhum registro no banco de dados");
+        }else{
+            return $result;
+        }
     }
 
 }

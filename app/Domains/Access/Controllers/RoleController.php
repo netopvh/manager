@@ -1,35 +1,36 @@
 <?php
-
 namespace App\Domains\Access\Controllers;
 
 use App\Core\Exceptions\GeneralException;
 use App\Core\Http\Controllers\Controller;
+use App\Domains\Access\Repositories\Contracts\PermissionRepository;
 use App\Domains\Access\Repositories\Contracts\RoleRepository;
 use Illuminate\Http\Request;
-use App\Domains\Access\Models\User;
-use App\Domains\Access\Repositories\Contracts\UserRepository;
 use Prettus\Validator\Exceptions\ValidatorException;
 
-class UserController extends Controller
+class RoleController extends Controller
 {
     /**
-     * @var UserRepository
+     * @var RoleRepository
      */
-    protected $userRepository;
-
     protected $roleRepository;
 
     /**
-     * Instancia o repositorio
-     *
-     * UserController constructor.
-     * @param UserRepository $userRepository
+     * @var PermissionRepository
      */
-    public function __construct(UserRepository $userRepository, RoleRepository $roleRepository)
+    protected $permissionRepository;
+
+    /**
+     * Instancia objeto do repositorio
+     *
+     * RoleController constructor.
+     * @param RoleRepository $roleRepository
+     */
+    public function __construct(RoleRepository $roleRepository, PermissionRepository $permissionRepository)
     {
         $this->middleware('auth');
-        $this->userRepository = $userRepository;
         $this->roleRepository = $roleRepository;
+        $this->permissionRepository = $permissionRepository;
     }
     /**
      * Exibe a pagina inicial dos usuários
@@ -38,7 +39,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('users.index');
+        return view('roles.index');
     }
 
     /**
@@ -48,8 +49,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.create')
-            ->withRoles($this->roleRepository->with('permissions')->all());
+        return view('roles.create')
+            ->withPermissions($this->permissionRepository->all());
     }
 
     /**
@@ -61,15 +62,11 @@ class UserController extends Controller
     public function store(Request $request)
     {
         try{
-            $this->userRepository->create($request->all());
-            return redirect()->route('users.home')->with('success','Registro inserido com sucesso!');
+            $this->roleRepository->create($request->all());
+            return redirect()->route('roles.home')->with('success','Registro inserido com sucesso!');
         }catch (ValidatorException $e){
-            return redirect()->route('users.create')
+            return redirect()->route('roles.create')
                 ->with('errors',$e->getMessageBag())
-                ->withInput();
-        }catch (GeneralException $e){
-            return redirect()->route('users.create')
-                ->with('errors',$e->getMessage())
                 ->withInput();
         }
     }
@@ -83,10 +80,11 @@ class UserController extends Controller
     public function edit($id)
     {
         try{
-            $user = $this->userRepository->findExists('id',$id);
-            return view('users.edit',compact('user'));
+            $user = $this->roleRepository->findExists('id',$id);
+            return view('roles.edit')
+                ->with('user', $user);
         }catch(GeneralException $e){
-            return redirect()->route('users.home')
+            return redirect()->route('roles.home')
                 ->with('errors',$e->getMessage());
         }
     }
@@ -101,13 +99,12 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         try{
-            $this->userRepository->update($request->all(), $id);
-            return redirect()->route('users.home')->with('success','Registro atualizado com sucesso!');
+            $this->roleRepository->update($request->all(), $id);
+            return redirect()->route('roles.home')->with('success','Registro atualizado com sucesso!');
         }catch (ValidatorException $e){
-            return redirect()->route('users.create')
+            return redirect()->route('roles.create')
                 ->with('errors',$e->getMessageBag())
                 ->withInput();
         }
     }
-
 }

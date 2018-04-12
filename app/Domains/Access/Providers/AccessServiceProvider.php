@@ -1,6 +1,8 @@
 <?php
 namespace App\Domains\Access\Providers;
 
+use App\Domains\Access\Repositories\Contracts\RoleRepository;
+use App\Domains\Access\Repositories\RoleRepositoryEloquent;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use App\Domains\Access\Repositories\Contracts\UserRepository;
@@ -36,6 +38,7 @@ class AccessServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(UserRepository::class,UserRepositoryEloquent::class);
+        $this->app->bind(RoleRepository::class,RoleRepositoryEloquent::class);
     }
 
     /**

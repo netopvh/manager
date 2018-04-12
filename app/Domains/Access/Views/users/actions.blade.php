@@ -3,7 +3,6 @@
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
             <i class="icon-menu9"></i>
         </a>
-
         <ul class="dropdown-menu dropdown-menu-right">
             <li><a href="{{ route('users.edit',['id' => $user->id]) }}"><i class="icon-pencil7"></i> Editar</a></li>
             @if($user->active)

@@ -18,5 +18,6 @@ interface BaseRepositoryContract extends RepositoryInterface, RepositoryCriteria
     public function query();
     public function findWithoutFail($id, $columns = ['*']);
     public function select(array $colunms = ['*']);
+    public function findExists(string $column, $value);
 
 }

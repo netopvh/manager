@@ -2,23 +2,21 @@
 
 namespace App\Domains\Access\Controllers\Api;
 
-use Illuminate\Http\Request;
 use App\Core\Http\Controllers\Controller;
 use Yajra\DataTables\DataTables;
-use App\Domains\Access\Repositories\Contracts\UserRepository;
-use Illuminate\Support\Str;
-use App\Domains\Access\Models\User;
+use Illuminate\Http\Request;
+use App\Domains\Access\Repositories\Contracts\RoleRepository;
 
-class UserApiController extends Controller
+class RoleApiController extends Controller
 {
-    protected $userRepository;
+    protected $roleRepository;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(RoleRepository $roleRepository)
     {
         $this->middleware('auth:api');
-        $this->userRepository = $userRepository;
+        $this->roleRepository = $roleRepository;
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -26,20 +24,13 @@ class UserApiController extends Controller
      */
     public function index(DataTables $dataTables)
     {
-        $model = $query = User::with('roles')->select('users.*');
+        $model = $this->roleRepository->select(['id','name','display_name','description']);
+
         return $dataTables->eloquent($model)
-            ->addColumn('active', function ($user){
-                return $user->active? '<span class="label label-success">Ativo</span>':'<span class="label label-warning">Inativo</span>';
+            ->addColumn('action', function ($role){
+                return view('roles.actions', compact('role'));
             })
-            ->addColumn('display_name',function (User $user){
-                return $user->roles->first(function ($value, $key){
-                    return $value;
-                });
-            })
-            ->addColumn('action', function ($user){
-                return view('users.actions', compact('user'));
-            })
-            ->rawColumns(['action','active'])
+            ->rawColumns(['action','status'])
             ->toJson();
     }
 
@@ -95,13 +86,7 @@ class UserApiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = $this->userRepository->find($id);
-        $user->active = $request->active;
-        if(!$user->save()){
-            return response()->json([
-                'status' => 'Error'
-            ]);
-        }
+
     }
 
     /**

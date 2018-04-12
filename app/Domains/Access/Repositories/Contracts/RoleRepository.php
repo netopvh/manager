@@ -5,11 +5,11 @@ namespace App\Domains\Access\Repositories\Contracts;
 use App\Core\Repositories\BaseRepositoryContract;
 
 /**
- * Interface UserRepository.
+ * Interface RoleRepository.
  *
  * @package namespace App\Domains\Access\Repositories\Contracts;
  */
-interface UserRepository extends BaseRepositoryContract
+interface RoleRepository extends BaseRepositoryContract
 {
     //
 }

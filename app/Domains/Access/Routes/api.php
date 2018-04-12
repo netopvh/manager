@@ -13,6 +13,10 @@ use Illuminate\Http\Request;
 |
 */
 
-$this->resource('users','Api\UserApiController',['except' => [
-    'create'
+$this->resource('users','Api\UserApiController',['only' => [
+    'index','update'
 ]]);
+$this->resource('roles','Api\RoleApiController',['only' => [
+    'index'
+]]);
+

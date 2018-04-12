@@ -48,6 +48,7 @@ gulp.task('js', function () {
         PATH_TEMPLATE + 'js/plugins/forms/validation/validate.min.js',
         PATH_TEMPLATE + 'js/plugins/forms/validation/localization/messages_pt_BR.js',
         PATH_JS + 'actions/users.js',
+        PATH_JS + 'actions/roles.js',
     ])
         .pipe(concat('bundle.min.js'))
         .pipe(uglify())
@@ -75,4 +76,5 @@ gulp.task('fonts', function () {
 //mix.copy('resources/assets/template/icons/icomoon/styles.css','public/css/icomoon.min.css');
 
 
-gulp.task('default', ['bootstrap-less','icon-css','js', 'images','fonts']);
+//gulp.task('default', ['bootstrap-less','icon-css','js', 'images','fonts']);
+gulp.task('default', ['js']);
