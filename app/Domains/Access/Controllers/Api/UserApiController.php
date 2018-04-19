@@ -32,9 +32,7 @@ class UserApiController extends Controller
                 return $user->active? '<span class="label label-success">Ativo</span>':'<span class="label label-warning">Inativo</span>';
             })
             ->addColumn('display_name',function (User $user){
-                return $user->roles->first(function ($value, $key){
-                    return $value;
-                });
+                return remove_bars($user->roles->pluck('display_name'));
             })
             ->addColumn('action', function ($user){
                 return view('users.actions', compact('user'));

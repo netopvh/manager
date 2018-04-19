@@ -38,6 +38,7 @@ class UserController extends Controller
      */
     public function index()
     {
+        //dd(remove_bars('["administrador"]'));
         return view('users.index');
     }
 

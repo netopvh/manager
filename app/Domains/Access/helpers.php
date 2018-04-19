@@ -1,7 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Neto
- * Date: 16/11/2017
- * Time: 23:31
- */
+
+if (!function_exists("remove_bars")) {
+    function remove_bars(string $attribute)
+    {
+        if($attribute === "[]"){
+            return "";
+        }else{
+            $resultOne = str_replace('["','',$attribute);
+            $resultTwo = str_replace('"]','',$resultOne);
+            return $resultTwo;
+        }
+    }
+}

@@ -30,7 +30,10 @@
         ],
         "psr-4": {
             "App\\": "app/"
-        }
+        },
+        "files": [
+            "app/Domains/Access/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

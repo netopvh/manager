@@ -1,7 +1,9 @@
 <?php
 namespace App\Domains\Access\Providers;
 
+use App\Domains\Access\Repositories\Contracts\PermissionRepository;
 use App\Domains\Access\Repositories\Contracts\RoleRepository;
+use App\Domains\Access\Repositories\PermissionRepositoryEloquent;
 use App\Domains\Access\Repositories\RoleRepositoryEloquent;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -39,6 +41,7 @@ class AccessServiceProvider extends ServiceProvider
     {
         $this->app->bind(UserRepository::class,UserRepositoryEloquent::class);
         $this->app->bind(RoleRepository::class,RoleRepositoryEloquent::class);
+        $this->app->bind(PermissionRepository::class,PermissionRepositoryEloquent::class);
     }
 
     /**

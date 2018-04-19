@@ -77,4 +77,6 @@ gulp.task('fonts', function () {
 
 
 //gulp.task('default', ['bootstrap-less','icon-css','js', 'images','fonts']);
-gulp.task('default', ['js']);
+gulp.task('watch',function () {
+    gulp.watch(PATH_JS + 'actions/*.js',['js'])
+});
